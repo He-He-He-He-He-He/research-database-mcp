@@ -4,6 +4,7 @@ sys.dont_write_bytecode=True
 import argparse, getpass, json
 from pathlib import Path
 import release_runtime as rt
+import access_policy as policy
 
 PROVIDERS={
  'eia':('美国能源信息署 EIA','https://www.eia.gov/opendata/register.php',['eia-v2-browse','electricity']),
@@ -33,11 +34,13 @@ GUIDE={
 }
 
 def status():
-    s=rt.load_state();return {'mode':s['mode'],'needs_choice':s['mode'] is None,'paused':s.get('paused',False),'active_source':s.get('active_source'),'progress':s['progress'],'state_location':str(rt.state_root()),'notice':'全部功能表示逐步配置本包可选能力，不等于每个数据库已授权或全量可用。'}
+    import network_health
+    s=rt.load_state();return {'mode':s['mode'],'mode_label':policy.LABELS.get(s['mode']),'choices':list(policy.MODES),'needs_choice':s['mode'] is None,'paused':s.get('paused',False),'active_source':s.get('active_source'),'progress':s['progress'],'state_location':str(rt.state_root()),'network':network_health.status(),'notice':'一般模式开放无需个人登录、无需机构网络的命令；浙大内网模式再开放机构网络命令；登录模式按需配置个人凭据。模式不会授予机构权限或证明查询可用；缺依赖和文件单独提示。'}
 
 def select(mode):
-    if mode not in ('partial','full'):raise ValueError('mode 须为 partial 或 full')
-    s=rt.load_state();s['mode']=mode;s['paused']=False;rt.save_state(s)
+    mode=policy.normalize(mode)
+    if mode is None:raise ValueError('请选择 general、zju 或 login')
+    s=rt.load_state();s['mode']=mode;rt.save_state(s)
     return status()
 
 def next_step(source=None):
@@ -48,8 +51,14 @@ def next_step(source=None):
         if source in s['progress']:s['progress'][source]['skipped']=False
         rt.save_state(s)
     if s.get('paused'):return {'action':'paused','message':'配置进度已保存；已有功能可以继续使用。下次调用 research_setup(action="resume") 即可继续。'}
-    if s['mode'] is None:return {'action':'ask_mode','question':'使用免登录的部分功能，还是逐步配置全部可选功能？','choices':['partial','full']}
-    if s['mode']=='partial':return {'action':'ready','message':'免登录模式可直接查询起步公共来源；可随时切换full，原配置进度仍保留。'}
+    if s['mode'] is None:return {'action':'ask_mode','question':'可先用一般模式；仅在需要机构网络或个人凭据时切换对应模式。','choices':list(policy.MODES),'recommended':'general'}
+    if s['mode']!='login':
+        if source in ('institution','public-files'):
+            if source=='institution' and s['mode']!='zju':return {'action':'mode_required','required_mode':'zju','message':'机构网络查询请选 zju；公开功能可继续使用。'}
+        elif source is not None:
+            return {'action':'mode_required','required_mode':'login','source':source,'message':'仅此个人凭据来源需要登录模式；不影响公开功能。'}
+        else:
+            return {'action':'ready','mode':s['mode'],'message':'无需个人登录的公开命令均已开放，starter 仅是起步样例标记。'+('机构网络命令也可尝试，仍需实际 IP 身份；网络不可达自动跳过。' if s['mode']=='zju' else '需要机构网络时选 zju；需要个人账号或密钥时再选 login。')}
     active=s.get('active_source')
     candidates=[source] if source else ([active] if active in PROVIDERS else [])+[key for key in PROVIDERS if key!=active]
     for key in candidates:
@@ -90,7 +99,7 @@ def pause(paused=True):
 def main():
     if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
     parser=argparse.ArgumentParser();sub=parser.add_subparsers(dest='action',required=True)
-    sub.add_parser('status');sub.add_parser('next');p=sub.add_parser('mode');p.add_argument('mode',choices=['partial','full'])
+    sub.add_parser('status');sub.add_parser('next');p=sub.add_parser('mode');p.add_argument('mode',choices=[*policy.MODES,*policy.ALIASES])
     p=sub.add_parser('credential');p.add_argument('source',choices=[k for k in PROVIDERS if k not in ('institution','public-files','other-keys')])
     a=parser.parse_args()
     if a.action=='status':r=status()

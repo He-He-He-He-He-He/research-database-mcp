@@ -4,12 +4,14 @@ sys.dont_write_bytecode=True
 import argparse,json,os,shutil,subprocess,tempfile,venv,hashlib
 from pathlib import Path
 from distribution import verify,VERSION
+import access_policy as policy
 
 def default_destination():
     base=Path(os.environ.get('LOCALAPPDATA',str(Path.home()/'.local/share'))) if os.name=='nt' else Path.home()/'.local/share'
     return base/'research-database-mcp'
 
 def install(root,destination,mode,config_only=False,extras=False):
+    mode=policy.normalize(mode)
     root=Path(root).resolve();destination=Path(destination).expanduser().resolve()
     if destination.is_relative_to(root):raise ValueError('安装目录必须在发行文件夹之外')
     result,files=verify(root,strict=False)
@@ -41,6 +43,7 @@ def install(root,destination,mode,config_only=False,extras=False):
     os.environ['RESEARCH_MCP_STATE_DIR']=str(state)
     import onboarding
     previous=onboarding.rt.load_state()
+    if mode is None:mode=previous.get('mode') or 'general'
     onboarding.select(mode)
     if previous.get('paused'):onboarding.pause(True)
     entry={'command':str(python),'args':['-B',str(app/'research_mcp.py')],'env':{'RESEARCH_MCP_STATE_DIR':str(state),'PYTHONDONTWRITEBYTECODE':'1'}}
@@ -55,14 +58,10 @@ def install(root,destination,mode,config_only=False,extras=False):
 def main():
     if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
     p=argparse.ArgumentParser(description='安装在用户独立目录，发行包保持干净')
-    p.add_argument('--mode',choices=['partial','full']);p.add_argument('--install-dir',type=Path,default=default_destination())
+    p.add_argument('--mode',choices=[*policy.MODES,*policy.ALIASES]);p.add_argument('--install-dir',type=Path,default=default_destination())
     p.add_argument('--config-only',action='store_true');p.add_argument('--extras',action='store_true');a=p.parse_args()
     if sys.version_info<(3,10):raise SystemExit('需要Python 3.10或更新版本')
     mode=a.mode
-    if mode is None and sys.stdin.isatty():
-        choice=input('请选择：1 部分功能（免登录） / 2 全部可选功能（可暂停）[1]：').strip()
-        if choice not in ('','1','2'):raise SystemExit('未选择有效模式')
-        mode='full' if choice=='2' else 'partial'
-    if not mode:raise SystemExit('请先询问用户partial/full，再通过--mode传入选择')
+    # New installs default to general; upgrades without --mode keep their choice.
     print(json.dumps(install(Path(__file__).resolve().parent,a.install_dir,mode,a.config_only,a.extras),ensure_ascii=False,indent=2))
 if __name__=='__main__':main()

@@ -53,20 +53,27 @@ def china_case(label,keyword,frequency,start,end):
 def main():
     if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
     p=argparse.ArgumentParser(description='可选联网抽样：只使用公开来源，不读取实际用户配置或凭据')
-    p.add_argument('--suite',choices=['quick','china','all'],default='quick');p.add_argument('--output',type=Path);p.add_argument('--allow-failures',action='store_true');a=p.parse_args()
+    p.add_argument('--suite',choices=['quick','china','modes','all'],default='quick');p.add_argument('--output',type=Path);p.add_argument('--allow-failures',action='store_true');a=p.parse_args()
     root=Path(__file__).resolve().parent
     if a.output and a.output.expanduser().resolve().is_relative_to(root):raise SystemExit('诊断输出必须位于发行目录外')
     original=os.environ.get('RESEARCH_MCP_STATE_DIR')
     try:
         with tempfile.TemporaryDirectory(prefix='research-public-check-') as state:
-            os.environ['RESEARCH_MCP_STATE_DIR']=state;onboarding.select('partial');rows=[]
+            os.environ['RESEARCH_MCP_STATE_DIR']=state;onboarding.select('general');rows=[]
             if a.suite in ('quick','all'):
                 for label,command,args in QUICK:
+                    began=time.monotonic();out=brief(label,command,query(command,args),time.monotonic()-began);rows.append(out);print(json.dumps(out,ensure_ascii=False),flush=True)
+            if a.suite in ('modes','all'):
+                cases=[('public-extension-datacite','datacite',['renewable energy','--size','1']),
+                       ('public-extension-epmc','epmc',['renewable energy','--size','1']),
+                       ('public-extension-journalism','journalism-crossref',['digital','--page-size','1']),
+                       ('public-extension-nbs-household','household-spending-groups',[])]
+                for label,command,args in cases:
                     began=time.monotonic();out=brief(label,command,query(command,args),time.monotonic()-began);rows.append(out);print(json.dumps(out,ensure_ascii=False),flush=True)
             if a.suite in ('china','all'):
                 for case in CHINA:
                     out=china_case(*case);rows.append(out);print(json.dumps(out,ensure_ascii=False),flush=True)
-            report={'environment':environment_summary(),'suite':a.suite,'credential_mode':'isolated partial; no saved user credentials','passed':sum(x['ok'] for x in rows),'total':len(rows),'checks':rows,'note':'仅证明这些样例请求的状态，不代表全部起步命令、参数、数据范围或其他运行环境均可用。'}
+            report={'environment':environment_summary(),'suite':a.suite,'credential_mode':'isolated general; no saved user credentials','passed':sum(x['ok'] for x in rows),'total':len(rows),'checks':rows,'note':'仅证明这些样例请求的状态，不代表全部起步命令、参数、数据范围或其他运行环境均可用。'}
             if a.output:
                 a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
             print(json.dumps({'passed':report['passed'],'total':report['total']},ensure_ascii=False))

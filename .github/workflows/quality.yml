@@ -30,6 +30,7 @@ jobs:
       - run: python -B self_check.py
       - run: python -B test_distribution.py
       - run: python -B test_diagnostics.py
+      - run: python -B test_access_modes.py
   public-samples:
     runs-on: ubuntu-latest
     timeout-minutes: 15

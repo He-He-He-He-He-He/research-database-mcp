@@ -28,7 +28,7 @@ class DiagnosticChecks(unittest.TestCase):
     def test_missing_positionals_are_argument_error(self):
         r=cli.query('usgs-earthquakes',[]);self.assertEqual(r['error'],'invalid_arguments');self.assertIn('start',r['message'])
     def test_optional_branch_is_not_network_or_mandatory_registration(self):
-        r=cli.query('pmi-list',[]);self.assertEqual(r['error'],'optional_setup_required');self.assertEqual(r['required_mode'],'full');self.assertIn('本身不要求',r['hint'])
+        r=cli.query('eia-v2-browse',['electricity']);self.assertEqual(r['error'],'mode_required');self.assertEqual(r['required_mode'],'login');self.assertNotIn('网络错误',r['hint'])
     def test_cas_parser_uses_the_same_error_contract(self):
         setup.select('full');r=cli.query('cas-common-search',[]);self.assertEqual(r['error'],'invalid_arguments')
     def test_public_nbs_is_allowed_before_network(self):

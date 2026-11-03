@@ -64,7 +64,7 @@ class ReleaseChecks(unittest.TestCase):
         with self.assertRaises(ValueError):cli.query('not-a-command',[])
         with self.assertRaises(ValueError):cli.query('crossref',['--api-key','test-only-value'])
     def test_partial_gates_optional(self):
-        setup.select('partial');self.assertEqual(cli.query('eia-v2-browse',['electricity'])['error'],'optional_setup_required')
+        setup.select('partial');self.assertEqual(cli.query('eia-v2-browse',['electricity'])['error'],'mode_required')
     def test_stdio_protocol(self):
         req=[{'jsonrpc':'2.0','id':1,'method':'initialize','params':{}},{'jsonrpc':'2.0','method':'notifications/initialized'},{'jsonrpc':'2.0','id':2,'method':'tools/list'}]
         p=subprocess.run([sys.executable,'-B',str(cli.ROOT/'research_mcp.py')],input=''.join(json.dumps(x)+'\n' for x in req),capture_output=True,text=True,env=rt.subprocess_environment(),check=True)

@@ -38,19 +38,15 @@ python3 -B verify_manifest.py
 
 ## 4. 选择安装模式
 
-先由用户选择：
+默认一般模式，无需为公开查询注册：
 
 ```sh
-python3 -B install.py --mode partial
+python3 -B install.py --mode general
 ```
 
-或：
+机构 IP / 内网功能用 `--mode zju`；需要个人账号/API 凭据的功能用 `--mode login`，按需逐步配置、随时暂停。general 已开放全部不需机构网络/个人凭据的命令，42 条起步样例不构成功能上限。
 
-```sh
-python3 -B install.py --mode full
-```
-
-`partial` 开放免登录起步命令；`full` 保留它们并允许逐项配置扩展。选择 full 并不会替你注册账号，也不要求一次完成所有来源。
+旧 `--mode partial` 对应 general，旧 `--mode full` 对应 login，旧进度与暂停状态保留。切换模式不代表源站真实权限已验证。
 
 Windows 上使用自己的 `python` 或 `py` 命令。不要使用其他操作系统复制来的虚拟环境。
 
@@ -110,7 +106,7 @@ AI 应能看到以下五个工具：
 依次执行：
 
 1. `research_setup`，参数 `{"action":"status"}`：确认模式和进度位置。
-2. `research_discover`，参数 `{"keyword":"世界银行","starter_only":true,"limit":5}`：确认可发现命令。
+2. `research_discover`，参数 `{"keyword":"世界银行","limit":5}`：确认可发现命令。
 3. `research_help`，参数 `{"command":"wb-series"}`：确认参数。
 4. `research_query`，参数如下：
 
@@ -124,9 +120,11 @@ AI 应能看到以下五个工具：
 
 ## 8. 接下来怎么用？
 
-- 只需公开查询：留在 partial，查看 [使用示例](EXAMPLES.md)。
+- 只需公开查询：留在 general，查看 [使用示例](EXAMPLES.md)。
 - 想配置其他 API 或机构访问：查看 [配置与暂停恢复](CONFIGURATION.md)。
 - 遇到问题：查看 [常见问题](TROUBLESHOOTING.md)。
 - 想更新或再次分享：重新运行新版安装器会创建新的版本代码副本，同一安装根目录的进度不被清空；分享使用原始发行文件或 `pack_release.py`，不转发运行目录。
 
 旧版升级前可先用 `research_setup(status)` 确认原来的 `state_location`。若旧版使用了与新安装根目录不同的进度目录，应在新安装进程中显式设置相同的 `RESEARCH_MCP_STATE_DIR`，并保留生成连接配置中的该值。这样只切换代码路径，不必复制账号或把本机进度混进发行包。
+
+未指定 `--mode` 时，新安装默认 general；同一状态目录的升级保留原模式（含旧 partial/full 的兼容迁移），不擅自降级或开启登录功能。

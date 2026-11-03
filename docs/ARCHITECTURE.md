@@ -42,8 +42,8 @@ flowchart TD
 
 | 工具 | 主要字段 |
 |---|---|
-| `research_setup` | `action`：status/next/select/mark/skip/pause/resume；按动作使用 mode/source/step |
-| `research_discover` | keyword，limit 1—40，starter_only，可选 kind 返回层级 |
+| `research_setup` | `action`：status/next/select/mark/skip/pause/resume/network_status/network_reset；按动作使用 mode/source/step |
+| `research_discover` | keyword，limit 1—40，starter_only、available_only（默认 true），可选 kind 返回层级 |
 | `research_help` | command |
 | `research_query` | command，args 字符串数组（最多 40 项，每项最多 4,000 字符） |
 | `research_verify` | source，使用向导内该来源的固定示例查询 |
@@ -85,7 +85,7 @@ python3 -B research_cli.py crossref "renewable energy" --rows 3
 
 ## 可用性与元数据
 
-`starter` 决定 partial 是否允许执行。其他静态标记来自源代码/模块依赖扫描，可能粗略；并不声明当前学校已授权或上游始终可用。新增适配器既需要实际查询验证，也需要完整的参数、分页、错误与来源说明。
+`access_policy.py` 按 general/zju/login 门控；starter 仅是起步样例。`build_access_catalog.py` 通过命令分支及可达函数扫描访问条件，避免整个模块传递误标；标记仍是静态提示；并不声明当前学校已授权或上游始终可用。新增适配器既需要实际查询验证，也需要完整的参数、分页、错误与来源说明。
 
 ## 扩展一个来源的建议流程
 
@@ -117,7 +117,7 @@ python3 -B test_distribution.py
 
 `diagnostics.py` 统一生成简短参数错误和脱敏来源诊断。参数错误保留 `usage`/`supported_options`，数值数量参数可从起步命令的 `count_option` 读取。MCP 工具保持五个，查询结果补充 `result_kind`、`partial` 和必要的 `warnings`。
 
-网络异常只添加诊断，不改变已确认正常的适配器传输逻辑。`doctor.py` 提供版本/环境及单命令检查；`public_check.py` 是显式运行的公开样例检查，使用临时 partial 状态，不读取用户实际凭据、不保存研究内容。
+网络异常只添加诊断，不改变已确认正常的适配器传输逻辑。`doctor.py` 提供版本/环境及单命令检查；`public_check.py` 是显式运行的公开样例检查，使用临时 general 状态（兼容旧 partial 别名），不读取用户实际凭据、不保存研究内容。
 
 ```sh
 python3 -B test_diagnostics.py
@@ -125,3 +125,11 @@ python3 -B public_check.py --suite all --output /path/outside/package/validation
 ```
 
 网络检查结果受来源状态影响，不与离线回归混为一谈。GitHub Actions 在 Linux、macOS、Windows 运行离线检查，并在 Linux 抽样请求公开接口；联网失败会写入独立报告，不能只看工作流的绿色状态判断所有来源可用。
+
+## v1.3.0：模式、状态迁移与网络跳过
+
+状态 schema 2 支持 general/zju/login。加载 schema 1 时仅规范化模式（partial→general、full→login），保存时使用 schema 2，不删除 progress、paused、active_source 或凭据。未选择模式仍先提示选择；新安装默认 general。
+
+query 先检查权限、做离线语法校验，再查短暂网络等待缓存并实际执行。RESEARCH_MCP_VALIDATE_ONLY 仅供内部语法检查，不查询网络或凭据；参数错误优先于网络等待。实际 DNS/连接/代理/TLS/超时错误由 network_health.py 记录 60 秒；查询返回 skipped，discover 默认过滤同一命令，AI 应继续其他来源。不同命令及 HTTP 拒绝/限流不被泛化禁用；network_reset 清除等待不影响配置进度。少数旧适配器只提供通用错误时不猜测其网络状态。
+
+运行 `python3 -B build_access_catalog.py` 可复建命令静态分类。network_hosts 为代码引用的主机提示，可能包含文档/命名空间，**不作为预探测清单或批量封禁依据**。network-health.json 只存实际失败命令、脱敏类型、可选主机名和重试时间，位于包外。

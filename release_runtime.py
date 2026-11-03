@@ -4,6 +4,11 @@ from pathlib import Path
 from collections.abc import Mapping
 
 _seen_credentials=set()
+_last_transport_error=None
+
+def transport_error():
+    """Actual last curl failure in this process, without a URL query or headers."""
+    return dict(_last_transport_error) if _last_transport_error else None
 
 def subprocess_environment():
     allowed={'PATH','SYSTEMROOT','WINDIR','COMSPEC','PATHEXT','TEMP','TMP','TMPDIR','LANG','LC_ALL','LC_CTYPE','APPDATA','LOCALAPPDATA','USERPROFILE','HTTPS_PROXY','HTTP_PROXY','ALL_PROXY','NO_PROXY','https_proxy','http_proxy','all_proxy','no_proxy','SSL_CERT_FILE','SSL_CERT_DIR','REQUESTS_CA_BUNDLE','CURL_CA_BUNDLE'}
@@ -31,9 +36,11 @@ def state_root():
 
 def load_state():
     p=state_root()/'progress.json'
-    if not p.exists():return {'schema':1,'mode':None,'progress':{}}
+    if not p.exists():return {'schema':2,'mode':None,'progress':{}}
     d=json.loads(p.read_text(encoding='utf-8'))
-    if d.get('schema')!=1 or d.get('mode') not in (None,'partial','full') or not isinstance(d.get('progress'),dict):raise ValueError('配置进度格式异常，请保留文件后检查')
+    from access_policy import normalize
+    if d.get('schema') not in (1,2) or not isinstance(d.get('progress'),dict):raise ValueError('配置进度格式异常，请保留文件后检查')
+    d['mode']=normalize(d.get('mode'));d['schema']=2
     return d
 
 def save_state(d):
@@ -57,7 +64,7 @@ def getenv(name,default=None):
     # Credentials and contact fields must be explicitly configured for this release.
     if name in ('HOME','USERPROFILE'):return str(home())
     if re.search(r'KEY|TOKEN|SECRET|PASSWORD|EMAIL|ACCOUNT|COOKIE',str(name),re.I):
-        value=os.environ.get('RESEARCH_MCP_EXTERNAL_'+str(name),default) if load_state().get('mode')=='full' else default
+        value=os.environ.get('RESEARCH_MCP_EXTERNAL_'+str(name),default) if load_state().get('mode')=='login' else default
         if isinstance(value,str) and len(value)>5:_seen_credentials.add(value)
         return value
     return os.environ.get(name,default)
@@ -84,7 +91,7 @@ def _system_keyring():
     return backend
 
 def credential(provider):
-    if load_state().get('mode')!='full':return None
+    if load_state().get('mode')!='login':return None
     env=os.environ.get('RESEARCH_MCP_'+provider.upper().replace('-','_')+'_KEY')
     if env:
         _seen_credentials.add(env.strip());return env.strip()
@@ -101,7 +108,7 @@ def credential(provider):
     except Exception:return None
 
 def save_credential(provider,value):
-    if load_state().get('mode')!='full':raise ValueError('请先选择全部可选功能模式')
+    if load_state().get('mode')!='login':raise ValueError('请先选择登录模式 login；一般模式和浙大内网模式不会读取个人凭据')
     if not value or len(value)>4096 or '\n' in value or '\r' in value:raise ValueError('凭据格式无效')
     service='research-mcp-publisher/'+provider
     if sys.platform=='darwin':
@@ -115,6 +122,7 @@ def save_credential(provider,value):
         _system_keyring().set_password(service,'research-mcp-user',value)
 
 def run(args,*pos,**kwargs):
+    global _last_transport_error
     if isinstance(args,(list,tuple)) and args and Path(str(args[0])).name=='security':
         if 'find-generic-password' not in args:raise RuntimeError('发布版不允许旧代码写入系统凭据')
         def option(name):return args[args.index(name)+1] if name in args and args.index(name)+1<len(args) else ''
@@ -131,7 +139,20 @@ def run(args,*pos,**kwargs):
     if isinstance(cmd,list) and cmd and cmd[0]=='/usr/bin/curl' and sys.platform!='darwin':cmd[0]='curl'
     if isinstance(cmd,list) and cmd and Path(str(cmd[0])).name=='curl' and (len(cmd)<2 or cmd[1]!='-q'):cmd.insert(1,'-q')
     kwargs.setdefault('env',subprocess_environment())
-    return subprocess.run(cmd,*pos,**kwargs)
+    result=subprocess.run(cmd,*pos,**kwargs)
+    if isinstance(cmd,list) and cmd and Path(str(cmd[0])).name=='curl':
+        _last_transport_error=None
+        if result.returncode in (5,6,7,28,35,60,77):
+            from diagnostics import curl_error
+            url=next((x for x in cmd if isinstance(x,str) and x.startswith(('https://','http://'))),'')
+            if not url:
+                config=kwargs.get('input','')
+                if isinstance(config,bytes):config=config.decode('utf-8',errors='replace')
+                if not isinstance(config,str):config=''
+                match=re.search(r'(?m)^url\s*=\s*"([^"\n]+)"',config)
+                if match:url=match.group(1)
+            _last_transport_error=curl_error(result.returncode,url).as_dict()
+    return result
 
 class _RedactingWriter:
     def __init__(self,stream):self.stream=stream

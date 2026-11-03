@@ -2,10 +2,16 @@
   "python_modules": 2281,
   "browser_modules": 375,
   "commands": 3753,
-  "institution_specific": 244,
+  "institution_specific": 111,
   "may_need_public_file": 824,
   "bundled_private_data": false,
   "starter_commands": 42,
-  "release_version": "1.2.0",
-  "runtime_location": "outside-distribution"
+  "release_version": "1.3.0",
+  "runtime_location": "outside-distribution",
+  "access_command_counts": {
+    "general": 3586,
+    "zju": 91,
+    "login": 76
+  },
+  "access_classification": "reachable-command-functions; static, not live availability"
 }

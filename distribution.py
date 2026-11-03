@@ -2,10 +2,11 @@
 import hashlib
 from pathlib import Path, PurePosixPath
 
-VERSION = '1.2.0'
+VERSION = '1.3.0'
 ARCHIVE_ROOT = '研究数据库MCP_发布整理版'
 BLOCKED_PARTS = {'.venv','venv','__pycache__','pycache','__MACOSX','.git','.cache'}
 ROOT_FILES = {'diagnostics.py','doctor.py','public_check.py','test_diagnostics.py','.gitattributes','CHANGELOG.md','README.md','00_发给自己的AI.md','AGENTS.md','AI安装指南.md','功能边界与隐私.md','验收说明.md','.gitignore','distribution.py','install.py','pack_release.py','verify_manifest.py','release_runtime.py','research_cli.py','research_mcp.py','onboarding.py','cas_bridge.py','self_check.py','test_distribution.py','requirements.txt','requirements-optional.txt','command_catalog.json','build_inventory.json','starter_examples.json'}
+ROOT_FILES.update({'access_policy.py','network_health.py','build_access_catalog.py','test_access_modes.py'})
 
 DOC_FILES = {'.github/workflows/quality.yml','docs/VALIDATION.md','docs/QUICKSTART.md','docs/EXAMPLES.md','docs/DATA_SOURCES.md','docs/CONFIGURATION.md','docs/TROUBLESHOOTING.md','docs/ARCHITECTURE.md'}
 

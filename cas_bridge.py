@@ -10,6 +10,9 @@ def main():
     x=s.add_parser('cas-common-search');x.add_argument('query');x.add_argument('--size',type=int,default=5);x.add_argument('--offset',type=int,default=0)
     x=s.add_parser('cas-common-detail');x.add_argument('casrn')
     a=p.parse_args()
+    import os
+    if os.environ.get('RESEARCH_MCP_VALIDATE_ONLY')=='1':
+        print(json.dumps({'ok':True,'validation_only':True}));return
     result=cas.search(a.query,a.size,a.offset) if a.command=='cas-common-search' else cas.detail(a.casrn)
     print(json.dumps(result,ensure_ascii=False))
 if __name__=='__main__':

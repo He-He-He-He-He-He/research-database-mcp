@@ -59,6 +59,10 @@ def error_payload(exc):
         converted=request_error(exc,getattr(getattr(exc,'request',None),'url','') or '')
         return {'error':str(converted),'diagnostics':converted.as_dict()}
     details=exc.as_dict() if hasattr(exc,'as_dict') else {'exception_type':type(exc).__name__}
+    if isinstance(exc,RuntimeError) and not hasattr(exc,'as_dict'):
+        import release_runtime
+        transport=release_runtime.transport_error()
+        if transport:details={**details,**transport,'evidence':'actual-curl-return-code'}
     return {'error':str(exc),'diagnostics':details}
 
 

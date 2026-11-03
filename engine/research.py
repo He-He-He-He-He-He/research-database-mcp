@@ -12721,6 +12721,9 @@ def main():
     x.add_argument('--select', required=True, help='JSON mapping from dimension names to lists of codes')
     x.add_argument('--version', default='latest')
     a = p.parse_args()
+    if release_runtime.getenv('RESEARCH_MCP_VALIDATE_ONLY') == '1':
+        print(json.dumps({'ok': True, 'validation_only': True}))
+        return
     base = 'https://data.stats.gov.cn/dg/website/publicrelease/web/external'
     if a.cmd == 'sources':
         browser_source = Path(__file__).with_name('browser_sources.mjs').read_text(encoding='utf-8')
