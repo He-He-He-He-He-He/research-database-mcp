@@ -49,7 +49,7 @@ python3 -B install.py --mode general
 {"command":"crossref","args":["renewable energy","--rows","3"]}
 ```
 
-参数须为字符串数组，不拼成 shell 命令。更多例子在 `starter_examples.json`。保留出处、原值、时间、单位、分页和局限。
+参数须为字符串数组，不拼成 shell 命令。更多例子在 `src/data/starter_examples.json`。保留出处、原值、时间、单位、分页和局限。
 
 ## 4. 浙大内网与登录模式
 
@@ -58,14 +58,14 @@ python3 -B install.py --mode general
 1. `read_terms`：查看该来源官方说明，涉及协议、费用或声明由用户决定。
 2. `account_ready`：用接收者自己的邮箱注册、验证并登录；已有账号不重复注册。密码由用户在可信页面输入。
 3. `credential_issued`：申请对应 API 产品凭据，网页登录不等于 API 获批。审批中就先跳过。
-4. `credential_saved`：使用**安装后的运行副本** `onboarding.py credential SOURCE`，通过隐藏输入保存到系统安全存储；该进程须使用连接配置中相同的 `RESEARCH_MCP_STATE_DIR`。不能在原始发行文件夹保存凭据、写 `.env`，或把密钥发到聊天/MCP参数。也可由接收者在服务环境显式设置 `RESEARCH_MCP_<SOURCE>_KEY`。
+4. `credential_saved`：使用**安装后的运行副本** `src/onboarding.py credential SOURCE`，通过隐藏输入保存到系统安全存储；该进程须使用连接配置中相同的 `RESEARCH_MCP_STATE_DIR`。不能在原始发行文件夹保存凭据、写 `.env`，或把密钥发到聊天/MCP参数。也可由接收者在服务环境显式设置 `RESEARCH_MCP_<SOURCE>_KEY`。
 5. 真实测试：`research_verify(source="...")`。不能以帮助页、注册成功或其他来源的查询替代。
 
 完成前四种步骤后，用 `research_setup(action="mark", source="...", step="...")` 记录。步骤记录是确认，不是网站实际授权证明。失败/等待时可 `research_setup(action="skip", source="...")`；以后 `next(source="...")` 返回该来源。
 
 已提供官方入口引导的可选来源包括 EIA、CiNii、ASEANstats、UNDP、Elsevier、WTO、Springer、Web of Science Starter、IOM Baseline/HNA、IATI、联合国人口和 CAS Common Chemistry。源站规则会变化，以实际官网为准。
 
-其他机构数据库需接收者自己的订阅和浏览器登录。部分辅助代码保留特定学校公开入口或页面断言，必须按接收者机构适配，不冒认身份。`engine/*.mjs` 是需要浏览器执行环境的辅助代码，不能由本 MCP 自动控制任意浏览器。公开 PDF/Excel 等文件和高级解析依赖不随包提供；缺文件必须明确报告，不能当作零结果。高级依赖可再次运行安装器加 `--extras`。少数功能依赖 macOS 工具，Linux/Windows 需另行适配。
+其他机构数据库需接收者自己的订阅和浏览器登录。部分辅助代码保留特定学校公开入口或页面断言，必须按接收者机构适配，不冒认身份。`src/engine/*.mjs` 是需要浏览器执行环境的辅助代码，不能由本 MCP 自动控制任意浏览器。公开 PDF/Excel 等文件和高级解析依赖不随包提供；缺文件必须明确报告，不能当作零结果。高级依赖可再次运行安装器加 `--extras`。少数功能依赖 macOS 工具，Linux/Windows 需另行适配。
 
 网络按真实查询失败自动短暂跳过，返回 `skipped`、原因及等待时间。AI 应继续其他可用来源。使用 `research_setup(action="network_status")` 查看；更换网络后 `network_reset` 清除等待。未检测不等于可达，不根据国别或代理有无推断断网，401/403/429、文件及依赖错误分别处理。不得声称“切换模式/装完依赖就全部来源可用”。
 
@@ -89,4 +89,4 @@ python3 -B install.py --mode general
 
 ## 判断查询得到的内容
 
-先区分请求完成、匹配记录、正文单元和数值，详见[实测能力与内容层级](CAPABILITIES.md)。ok:true加空数组不是取得数据，目录/题录导出也不是全文下载。discover的verified_only只筛有样例证据的命令，不限制默认一般模式。followup_template使用所选同一记录的真实字段；题名逐字核对，简体/繁体字段不可混用。
+status中的coverage分列命令索引、历史样例、未验证入口和后续模板；这些计数不是实时可用数据库数。先区分请求完成、匹配记录、正文单元和数值，详见[实测能力与内容层级](CAPABILITIES.md)。ok:true加空数组不是取得数据，目录/题录导出也不是全文下载。discover的verified_only只筛有样例证据的命令，不限制默认一般模式。followup_template使用所选同一记录的真实字段；题名逐字核对，简体/繁体字段不可混用。

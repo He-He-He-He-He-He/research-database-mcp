@@ -10,7 +10,7 @@ flowchart TD
     B --> C[research_setup：配置状态]
     B --> D[discover / help / query / verify]
     D --> E[research_cli.py：白名单命令与参数数组]
-    E --> F[engine/research.py：具体适配器]
+    E --> F[src/engine/research.py：具体适配器]
     E --> G[cas_bridge.py：CAS 入口]
     F --> H[上游公开接口或自己的已配置来源]
     G --> H
@@ -78,7 +78,7 @@ MCP 调用结果的 `content` 包含文本块，文本内容是工具返回的 J
 可用安装后的 Python 调用运行副本：
 
 ```sh
-python3 -B research_cli.py crossref "renewable energy" --rows 3
+python3 -B src/research_cli.py crossref "renewable energy" --rows 3
 ```
 
 这只是说明脚本与参数关系；实际运行时使用安装器输出的真实路径，并保留与 MCP 相同的 `RESEARCH_MCP_STATE_DIR`。CLI 与 MCP 都受模式和命令目录检查约束。
@@ -138,7 +138,7 @@ query 先检查权限、做离线语法校验，再查短暂网络等待缓存�
 
 新增batch_query.py、result_store.py、research_sdk.py；两项新工具沿用原模式与凭据门控。静态目录缓存；结果不缓存为查询答案，auto仅在大结果时导出本次完整返回。导出在包外，按随机编号白名单读取；SDK通过上下文状态目录传给子进程，避免不同客户端串用配置。安装器只在自己虚拟环境注册SDK路径，config-only不动系统Python。详见[批量与导出](PRODUCTIVITY.md)。
 
-## v1.4.1目录整理
+## 目录布局
 
 仓库根目录仅保留README、安装入口、AI规则和发行校验文件。实际服务、SDK与数据库适配器在src/，命令索引位于src/data/，文档在docs/，测试在tests/，维护脚本在tools/。`python3 -B install.py`保持兼容；安装器生成新的src/research_mcp.py连接路径和SDK导入路径。状态目录及系统凭据命名空间不迁移、不重置。
 

@@ -2,6 +2,8 @@
 
 **让你的 AI 按问题查询统计数据、学术文献与法律资料，并保留来源。**
 
+1.6.0 分发版 · [如何发给别人](docs/DISTRIBUTION.md) · 已验证样例与未验证入口分开，网络、账号及机构权限由接收者自己提供。
+
 [下载最新版](https://github.com/He-He-He-He-He-He/research-database-mcp/releases/latest) · [安装教程](docs/QUICKSTART.md) · [数据源清单](docs/DATA_SOURCES.md) · [使用示例](docs/EXAMPLES.md) · [更新记录](docs/CHANGELOG.md)
 
 ## 能做什么

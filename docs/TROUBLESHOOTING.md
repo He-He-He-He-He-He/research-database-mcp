@@ -65,7 +65,7 @@
 
 macOS 可能出现访问授权提示。Windows/Linux 或云端容器需要支持的系统安全存储后端。也可以由用户在服务的安全环境设置里显式配置专用变量。不要把密钥写入 README、代码、发行包或聊天消息。
 
-保存凭据时，运行副本的 `onboarding.py` 必须使用与 MCP 相同的 `RESEARCH_MCP_STATE_DIR` 和 login 模式。否则可能出现“配置在另一个状态目录”的误会。
+保存凭据时，运行副本的 `src/onboarding.py` 必须使用与 MCP 相同的 `RESEARCH_MCP_STATE_DIR` 和 login 模式。否则可能出现“配置在另一个状态目录”的误会。
 
 ## 暂停后会丢进度吗？
 

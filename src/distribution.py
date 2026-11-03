@@ -2,14 +2,14 @@
 import hashlib
 from pathlib import Path, PurePosixPath
 
-VERSION = '1.5.1'
+VERSION = '1.6.0'
 ARCHIVE_ROOT = '研究数据库MCP_发布整理版'
 BLOCKED_PARTS = {'.venv','venv','__pycache__','pycache','__MACOSX','.git','.cache'}
 ROOT_FILES = {'README.md', '.gitattributes', 'AGENTS.md', '.gitignore', 'install.py'}
 
 PACKAGE_FILES = {'docs/INSTALL.md', 'tests/_bootstrap.py', 'src/research_sdk.py', 'docs/PRIVACY.md', 'docs/CHANGELOG.md', 'docs/ARCHITECTURE.md', 'docs/AI_HANDOFF.md', 'docs/QUICKSTART.md', 'docs/PRODUCTIVITY.md', 'src/network_health.py', 'tools/doctor.py', 'tools/verify_manifest.py', 'src/install_network.py', 'docs/TROUBLESHOOTING.md', 'src/cas_bridge.py', 'src/requirements.txt', 'src/research_mcp.py', 'tests/test_core.py', 'docs/DATA_SOURCES.md', 'tools/public_check.py', 'tests/test_access_modes.py', 'src/access_policy.py', 'src/diagnostics.py', 'src/result_store.py', 'src/release_runtime.py', 'tools/_bootstrap.py', 'src/batch_query.py', 'tools/build_access_catalog.py', 'src/distribution.py', 'src/requirements-optional.txt', 'docs/ACCEPTANCE.md', 'src/client_connect.py', 'src/data/command_catalog.json', 'src/data/build_inventory.json', 'docs/EXAMPLES.md', 'tests/test_distribution.py', 'tools/pack_release.py', 'src/research_cli.py', 'docs/VALIDATION.md', 'tests/test_diagnostics.py', 'docs/CONFIGURATION.md', 'src/onboarding.py', '.github/workflows/quality.yml', 'src/data/starter_examples.json', 'tests/test_productivity.py'}
 
-PACKAGE_FILES.update({'src/result_contracts.py','src/capabilities.py','src/data/verified_capabilities.json','tests/test_result_contracts.py','tools/capability_check.py','docs/CAPABILITIES.md','tests/test_institution_responses.py'})
+PACKAGE_FILES.update({'src/result_contracts.py','src/capabilities.py','src/data/verified_capabilities.json','tests/test_result_contracts.py','tools/capability_check.py','docs/CAPABILITIES.md','tests/test_institution_responses.py','tests/test_release_readiness.py','docs/DISTRIBUTION.md'})
 
 def permitted(name):
     p=PurePosixPath(name)

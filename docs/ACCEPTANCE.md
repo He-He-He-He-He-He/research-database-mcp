@@ -1,4 +1,4 @@
-# v1.5.1 分发与验收
+# v1.6.0 分发与验收
 
 [返回首页](../README.md) · [验证记录](VALIDATION.md) · [实测能力](CAPABILITIES.md)
 

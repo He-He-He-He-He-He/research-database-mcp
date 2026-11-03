@@ -76,7 +76,7 @@
 
 ## 4. 保存自己的凭据
 
-建议使用安装后的 `onboarding.py credential SOURCE`，通过本机终端隐藏输入。必须：
+建议使用安装后的 `src/onboarding.py credential SOURCE`，通过本机终端隐藏输入。必须：
 
 - 使用安装器返回的 Python 与运行副本路径。
 - 使用连接配置里相同的 `RESEARCH_MCP_STATE_DIR`，并处于 login 模式。

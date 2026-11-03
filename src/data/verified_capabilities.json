@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "release_version": "1.5.1",
+  "release_version": "1.6.0",
   "notice": "样例级证据；未列出的命令只有代码入口。sample_verified仅验证所列目录/题录/正文单元/数值，非实时状态或全库权限。无维护者凭据、Cookie、正文或下载文件。",
   "commands": {
     "adb-dataflows": {

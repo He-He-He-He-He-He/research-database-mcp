@@ -35,7 +35,8 @@ GUIDE={
 
 def status():
     import network_health
-    s=rt.load_state();return {'mode':s['mode'],'mode_label':policy.LABELS.get(s['mode']),'choices':list(policy.MODES),'needs_choice':s['mode'] is None,'paused':s.get('paused',False),'active_source':s.get('active_source'),'progress':s['progress'],'state_location':str(rt.state_root()),'network':network_health.status(),'notice':'一般模式开放无需个人登录、无需机构网络的命令；浙大内网模式再开放机构网络命令；登录模式按需配置个人凭据。模式不会授予机构权限或证明查询可用；缺依赖和文件单独提示。'}
+    from capabilities import coverage
+    s=rt.load_state();return {'mode':s['mode'],'mode_label':policy.LABELS.get(s['mode']),'choices':list(policy.MODES),'needs_choice':s['mode'] is None,'paused':s.get('paused',False),'active_source':s.get('active_source'),'progress':s['progress'],'state_location':str(rt.state_root()),'network':network_health.status(),'coverage':coverage(),'notice':'一般模式开放无需个人登录、无需机构网络的命令；浙大内网模式再开放机构网络命令；登录模式按需配置个人凭据。模式不会授予机构权限或证明查询可用；缺依赖和文件单独提示。'}
 
 def select(mode):
     mode=policy.normalize(mode)

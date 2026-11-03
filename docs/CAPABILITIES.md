@@ -2,7 +2,7 @@
 
 [返回首页](../README.md) · [验证记录](VALIDATION.md) · [数据源清单](DATA_SOURCES.md)
 
-此页说明 v1.5.1 的抽样证据与边界。代码目录有3,753条命令，但不是3,753个已接通数据库。42条starter是历史起步回归样例；其他公开命令仍可在一般模式尝试。每个入口均有结果类型或明确的 `unclassified`，未知类型不冒充已验证。
+此页说明 v1.6.0 的抽样证据与边界。代码目录有3,753条命令，但不是3,753个已接通数据库。42条starter是历史起步回归样例；其他公开命令仍可在一般模式尝试。每个入口均有结果类型或明确的 `unclassified`，未知类型不冒充已验证。
 
 机器可读的样例在 [verified_capabilities.json](../src/data/verified_capabilities.json)。`research_discover(verified_only=true)` 只显示收录了非空样例的命令；默认仍可发现尚未测试的入口。`sample_verified` 对应具体参数、日期、环境和结果层级，不表示全库权限或现在一定在线。没有证据的入口标为 `not_tested`；仅空结果与已观察失败分别标为 `sample_empty_only`、`sample_failed`。
 
