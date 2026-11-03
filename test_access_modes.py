@@ -1,7 +1,7 @@
 """Access boundaries, legacy migrations, and actual-failure-based network skipping."""
 import sys
 sys.dont_write_bytecode=True
-import json,os,subprocess,tempfile,unittest
+import json,os,platform,subprocess,tempfile,unittest
 from unittest import mock
 from pathlib import Path
 import access_policy as policy
@@ -14,6 +14,9 @@ import research_mcp as mcp
 
 class AccessChecks(unittest.TestCase):
     def setUp(self):
+        # Windows platform.system() can spawn cmd.exe on first use. Resolve it
+        # before tests mock the shared subprocess.run function for query calls.
+        platform.system()
         self.temp=tempfile.TemporaryDirectory(prefix='access-check-')
         self.env=mock.patch.dict(os.environ,{'RESEARCH_MCP_STATE_DIR':self.temp.name})
         self.env.start();setup.select('general')
