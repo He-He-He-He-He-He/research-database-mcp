@@ -34,7 +34,7 @@ def _frequency_candidates(keyword,frequency,size,max_requests=8):
         counter+=1;heapq.heappush(queue,(-score,len(path),counter,ident,leaf,path+[name]))
     for node in api.categories(frequency,root):enqueue(node,[roots[0].get('_name','')])
     used+=1
-    while queue and used<max_requests and not matches:
+    while queue and used<max_requests and not any(fold(item['name']).startswith(query) for item in matches):
         _,_,_,ident,leaf,path=heapq.heappop(queue)
         if ident in seen:continue
         seen.add(ident);used+=1
@@ -77,11 +77,17 @@ def search(keyword, page=1, size=10, frequency='annual'):
     fallback=None
     if not out and page==1 and frequency!='annual':out,fallback=_frequency_candidates(keyword,frequency,size)
     result = {'source': BASE + '/query', 'keyword': keyword, 'page': page, 'page_size': size, 'frequency': frequency, 'source_total_all_frequencies': d.get('count'), 'source_returned_rows': len(d['data']), 'candidates': out, 'note': '仅从当前搜索结果页挑选指定频率候选；上游搜索可能返回相近主题，须核对名称和单位。源返回条数可能与请求 pageSize 不同，跨页可能重复或变化；当前页无候选不代表其他页无结果。'}
+    for candidate in out:
+        compact=re.sub(r'\s+','',str(candidate.get('name','')))
+        needle=re.sub(r'\s+','',keyword)
+        candidate['literal_keyword_in_name']=needle in compact
+        candidate['name_prefix_matches_query']=compact.startswith(needle)
+    result['selection_required']=True
     result['requested_keyword']=requested_keyword
     result['search_keyword']=keyword
     if fallback:
         result['frequency_tree_fallback']=fallback
-        result['note']+=' 全局搜索首页未返回所选频率，已按该频率官方目录有限查找；候选非穷尽，仍须核对单位与口径。'
+        result['note']+=' 全局搜索首页未返回所选频率，已按该频率官方目录有限查找；候选非穷尽，仍须核对单位与口径；分项指标不能当作总指标，不应自动选择首条。'
     if frequency == 'annual':
         result['annual_candidates'] = out
     return result

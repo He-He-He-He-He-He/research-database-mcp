@@ -102,6 +102,13 @@ class DiagnosticChecks(unittest.TestCase):
         with mock.patch.object(cli.subprocess,'run',return_value=subprocess.CompletedProcess([],0,json.dumps(data),'')):
             r=cli.query('nbs-frequency-series',['0'*32,'1'*32,'2'*32,'monthly','2024-01','2024-01'])
         self.assertEqual(r['numeric_observation_count'],0);self.assertTrue(r['warnings'])
+    def test_component_cpi_must_not_be_reported_as_overall_cpi(self):
+        import public_check
+        row={'catalog_id':'0'*32,'indicator_id':'1'*32,'root_id':'2'*32,'region_code':'000000000000','name':'蛋类居民消费价格指数'}
+        found={'ok':True,'result':{'search_keyword':'居民消费价格','candidates':[row]}}
+        with mock.patch.object(public_check,'query',return_value=found) as query:
+            result=public_check.china_case('cpi','居民消费价格指数','monthly','2024-01','2024-03')
+        self.assertFalse(result['ok']);self.assertEqual(result['error'],'no_expected_name_prefix');self.assertEqual(query.call_count,1)
     def test_all_public_command_help_uses_valid_entrypoints(self):
         for row in cli.catalog():
             if row.get('starter'):

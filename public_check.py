@@ -35,8 +35,9 @@ def china_case(label,keyword,frequency,start,end):
     needle=found['result'].get('search_keyword',keyword)
     candidates=[x for x in rows if x.get('region_code')=='000000000000' and needle in str(x.get('name',''))]
     if not candidates:return {'check':label,'command':'nbs-frequency-discover','ok':False,'error':'no_matching_national_candidate','seconds':round(time.monotonic()-began,2)}
-    candidates.sort(key=lambda x:not str(x.get('name','')).strip().startswith(needle))
-    candidate=candidates[0]
+    expected=[x for x in candidates if str(x.get('name','')).strip().startswith(needle)]
+    if not expected:return {'check':label,'command':'nbs-frequency-discover','ok':False,'error':'no_expected_name_prefix','related_candidates':len(candidates),'seconds':round(time.monotonic()-began,2)}
+    candidate=expected[0]
     args=[candidate['catalog_id'],candidate['indicator_id'],candidate['root_id'],frequency,start,end,'--region-code',candidate['region_code'],'--region-name',candidate.get('region_name') or '全国']
     result=query('nbs-frequency-series',args)
     out=brief(label,'nbs-frequency-series',result,time.monotonic()-began)
