@@ -73,6 +73,35 @@ class DiagnosticChecks(unittest.TestCase):
         with mock.patch.object(install,'verify',return_value=({'ok':True},{})):
             install.install(cli.ROOT,Path(self.temp.name)/'runtime','full',config_only=True)
         s=setup.status();self.assertTrue(s['paused']);self.assertEqual(s['active_source'],'wto')
+    def test_frequency_discovery_does_not_stop_at_annual_only_search_page(self):
+        module=importlib.import_module('nbs_publicrelease_chain_adapter');api=importlib.import_module('nbs_new_national_timeseries_adapter')
+        ids=[str(x)*32 for x in range(4)]
+        def categories(frequency,parent_id=''):
+            self.assertEqual(frequency,'monthly')
+            if not parent_id:return [{'_id':ids[0],'_name':'月度数据'}]
+            if parent_id==ids[0]:return [{'_id':ids[1],'_name':'价格指数','isLeaf':False}]
+            return [{'_id':ids[2],'_name':'居民消费价格指数','isLeaf':True}]
+        global_result={'success':True,'data':{'data':[{'dt_type':'YY'}],'count':1}}
+        metadata={'total':1,'list':[{'_id':ids[3],'i_showname':'居民消费价格指数','du_name':'上年同月=100'}]}
+        with mock.patch.object(module,'get',return_value=global_result),mock.patch.object(api,'categories',side_effect=categories),mock.patch.object(api,'indicators',return_value=metadata):
+            r=module.search('居民消费价格指数',frequency='monthly')
+        self.assertEqual(len(r['candidates']),1);self.assertEqual(r['candidates'][0]['root_id'],ids[0]);self.assertEqual(r['frequency_tree_fallback']['requests_used'],4)
+    def test_frequency_tree_budget_reports_incompleteness(self):
+        module=importlib.import_module('nbs_publicrelease_chain_adapter');api=importlib.import_module('nbs_new_national_timeseries_adapter')
+        responses=[[{'_id':'0'*32,'_name':'月度数据'}],[{'_id':'1'*32,'_name':'价格指数','isLeaf':False}]]
+        with mock.patch.object(api,'categories',side_effect=responses),mock.patch.object(api,'indicators') as fetch:
+            matches,info=module._frequency_candidates('价格','monthly',10,max_requests=2)
+        self.assertFalse(matches);self.assertFalse(info['complete']);self.assertEqual(info['requests_used'],2);fetch.assert_not_called()
+    def test_ons_bad_first_page_schema_is_explicit(self):
+        module=importlib.import_module('ons_datasets_general_adapter')
+        with mock.patch.object(module,'catalogue',return_value={'unexpected':'shape'}):
+            with self.assertRaises(SourceError) as caught:module.discover('population')
+        self.assertEqual(caught.exception.as_dict()['kind'],'invalid_response')
+    def test_period_rows_without_values_cannot_be_mistaken_for_observations(self):
+        data={'data':[{'code':'202401MM','values':[]}]}
+        with mock.patch.object(cli.subprocess,'run',return_value=subprocess.CompletedProcess([],0,json.dumps(data),'')):
+            r=cli.query('nbs-frequency-series',['0'*32,'1'*32,'2'*32,'monthly','2024-01','2024-01'])
+        self.assertEqual(r['numeric_observation_count'],0);self.assertTrue(r['warnings'])
     def test_all_public_command_help_uses_valid_entrypoints(self):
         for row in cli.catalog():
             if row.get('starter'):

@@ -32,8 +32,10 @@ def china_case(label,keyword,frequency,start,end):
     found=query('nbs-frequency-discover',[keyword,frequency,'--size','20'])
     if not found.get('ok'):return brief(label,'nbs-frequency-discover',found,time.monotonic()-began)
     rows=found['result'].get('candidates',[])
-    candidates=[x for x in rows if x.get('region_code')=='000000000000' and keyword in str(x.get('name',''))]
+    needle=found['result'].get('search_keyword',keyword)
+    candidates=[x for x in rows if x.get('region_code')=='000000000000' and needle in str(x.get('name',''))]
     if not candidates:return {'check':label,'command':'nbs-frequency-discover','ok':False,'error':'no_matching_national_candidate','seconds':round(time.monotonic()-began,2)}
+    candidates.sort(key=lambda x:not str(x.get('name','')).strip().startswith(needle))
     candidate=candidates[0]
     args=[candidate['catalog_id'],candidate['indicator_id'],candidate['root_id'],frequency,start,end,'--region-code',candidate['region_code'],'--region-name',candidate.get('region_name') or '全国']
     result=query('nbs-frequency-series',args)
@@ -66,6 +68,9 @@ def main():
             if a.output:
                 a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
             print(json.dumps({'passed':report['passed'],'total':report['total']},ensure_ascii=False))
+            if os.environ.get('GITHUB_ACTIONS')=='true':
+                notice=json.dumps(report,ensure_ascii=False).replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+                print('::notice title=Public validation report::'+notice)
             return 0 if a.allow_failures or report['passed']==report['total'] else 1
     finally:
         if original is None:os.environ.pop('RESEARCH_MCP_STATE_DIR',None)

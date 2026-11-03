@@ -10,7 +10,9 @@ def main():
     p.add_argument('--command');p.add_argument('--args-json',default='[]')
     a=p.parse_args();out={'environment':environment_summary()}
     if a.command:
-        result=query(a.command,json.loads(a.args_json))
+        try:args=json.loads(a.args_json)
+        except ValueError:p.error('--args-json 必须是有效的 JSON 字符串数组')
+        result=query(a.command,args)
         # Report health and diagnostics, not the research content itself.
         out['query']={k:v for k,v in result.items() if k not in ('result','requirements')}
         if result.get('ok'):out['query']['response_type']=type(result.get('result')).__name__

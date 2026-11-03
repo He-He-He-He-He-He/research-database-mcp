@@ -20,7 +20,7 @@ def scrub(text):
     for k,v in os.environ.items():
         if k.startswith('RESEARCH_MCP_') and re.search('KEY|TOKEN|SECRET|PASSWORD|COOKIE',k) and len(v)>5:
             text=text.replace(v,'[REDACTED]')
-    text=re.sub(r'(?i)([?&](?:api[_-]?key|access_token|token|key|subscription-key)=)[^&\s"<>]+',r'\1[REDACTED]',text)
+    text=re.sub(r'(?i)([?&](?:api[_-]?key|access_token|token|key|subscription-key|sig|signature|x-amz-signature|x-amz-security-token|x-amz-credential)=)[^&\s"<>]+',r'\1[REDACTED]',text)
     text=re.sub(r'(?i)(Authorization\s*[:=]\s*)(?:Bearer\s+)?[^\s"<>]+',r'\1[REDACTED]',text)
     return text
 
@@ -81,8 +81,16 @@ def query(command,args=None,timeout=90,help_only=False):
     partial=isinstance(value,dict) and bool(value.get('failed_pages'))
     if partial and value.get('pages',value.get('scanned',0))==0:failure=True
     result={'ok':not failure,'command':command,'result':value,'requirements':entry,'source':'research-mcp','partial':partial,'result_kind':entry.get('result_kind','unclassified'),'verification':'真实命令返回；目录、元数据与数值不同，单次成功不代表完整覆盖、机构授权或其他参数通过。'}
+    if command in ('nbs-annual-series','nbs-frequency-series') and isinstance(value,dict):
+        import math
+        values=[point.get('value') for period in value.get('data',[]) for point in period.get('values',[])]
+        def numeric(item):
+            try:return item is not None and math.isfinite(float(str(item).replace(',','')))
+            except (TypeError,ValueError):return False
+        result['numeric_observation_count']=sum(numeric(item) for item in values)
+        if result['numeric_observation_count']==0:result['warnings']=['源返回了响应，但本次没有数值观测；不能把时期行当作数值，也不能将缺失值补成零。']
     if partial:
-        result['warnings']=['部分请求失败，结果不完整；请查看result.failed_pages。']
+        result.setdefault('warnings',[]).append('部分请求失败，结果不完整；请查看result.failed_pages。')
         if failure:result['error']='upstream_scan_failed'
     return result
 
