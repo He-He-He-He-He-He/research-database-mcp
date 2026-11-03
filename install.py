@@ -53,6 +53,7 @@ def install(root,destination,mode,config_only=False,extras=False):
     return {'installed':True,'version':VERSION,'mode':mode,'connection_file':str(config_path),'codex_connection_file':str(connection/'mcp-config.codex.toml'),'mcp_entry':entry,'runtime_app':str(app),'progress_location':str(state),'source_unchanged':True,'next':'只把本服务追加到当前AI客户端支持的MCP配置；不要打印原有连接器密钥。连接后调用research_setup(status/next)，工具应有5个。'}
 
 def main():
+    if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
     p=argparse.ArgumentParser(description='安装在用户独立目录，发行包保持干净')
     p.add_argument('--mode',choices=['partial','full']);p.add_argument('--install-dir',type=Path,default=default_destination())
     p.add_argument('--config-only',action='store_true');p.add_argument('--extras',action='store_true');a=p.parse_args()

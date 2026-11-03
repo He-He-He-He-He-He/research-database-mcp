@@ -64,4 +64,4 @@ def error_payload(exc):
 
 def environment_summary():
     from distribution import VERSION
-    return {'package_version':VERSION,'platform':platform.system(),'python_version':platform.python_version(),'curl_available':shutil.which('curl') is not None,'proxy_configured':any(os.environ.get(k) for k in ('HTTPS_PROXY','HTTP_PROXY','ALL_PROXY','https_proxy','http_proxy','all_proxy')),'custom_ca_configured':any(os.environ.get(k) for k in ('SSL_CERT_FILE','REQUESTS_CA_BUNDLE','CURL_CA_BUNDLE'))}
+    return {'package_version':VERSION,'platform':platform.system(),'python_version':platform.python_version(),'curl_available':shutil.which('curl') is not None,'proxy_environment_configured':any(os.environ.get(k) for k in ('HTTPS_PROXY','HTTP_PROXY','ALL_PROXY','https_proxy','http_proxy','all_proxy')),'custom_ca_environment_configured':any(os.environ.get(k) for k in ('SSL_CERT_FILE','SSL_CERT_DIR','REQUESTS_CA_BUNDLE','CURL_CA_BUNDLE'))}

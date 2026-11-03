@@ -6,6 +6,7 @@ from diagnostics import environment_summary
 from research_cli import query
 
 def main():
+    if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
     p=argparse.ArgumentParser(description='检查当前 MCP 运行环境，或复现一条实际查询')
     p.add_argument('--command');p.add_argument('--args-json',default='[]')
     a=p.parse_args();out={'environment':environment_summary()}

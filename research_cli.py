@@ -70,7 +70,7 @@ def query(command,args=None,timeout=90,help_only=False):
         elif 'ModuleNotFoundError' in stderr or details.get('exception_type')=='ModuleNotFoundError':category='missing_dependency'
         elif 'FileNotFoundError' in stderr or details.get('exception_type')=='FileNotFoundError':category='missing_public_resource'
         elif details.get('exception_type')=='ValueError':category='invalid_arguments_or_response'
-        hints={'missing_dependency':'此命令缺少依赖库；按缺失库安装，必要时使用 --extras。','missing_public_resource':'此命令需要公开文件；请根据帮助提供文件。缺文件不代表无数据。','upstream_http_error':'检查具体接口返回的 HTTP 状态、来源访问条件和限流提示。','network_tls_error':'检查运行环境的证书链和 CA 设置；不要关闭证书校验。','network_proxy_error':'检查当前进程的代理配置，不要公开代理凭据。','network_dns_error':'检查运行环境是否能解析具体接口域名。','upstream_timeout':'缩小查询或稍后再试；先保留配置并使用其他来源。'}
+        hints={'invalid_arguments_or_response':'先核对参数取值和返回格式；旧适配器的 ValueError 仍可能来自输入或响应校验，不应直接判为网络或凭据问题。','missing_dependency':'此命令缺少依赖库；按缺失库安装，必要时使用 --extras。','missing_public_resource':'此命令需要公开文件；请根据帮助提供文件。缺文件不代表无数据。','upstream_http_error':'检查具体接口返回的 HTTP 状态、来源访问条件和限流提示。','network_tls_error':'检查运行环境的证书链和 CA 设置；不要关闭证书校验。','network_proxy_error':'检查当前进程的代理配置，不要公开代理凭据。','network_dns_error':'检查运行环境是否能解析具体接口域名。','upstream_timeout':'缩小查询或稍后再试；先保留配置并使用其他来源。'}
         return {'ok':False,'command':command,'error':category,'message':message,'diagnostics':{**details,'environment':environment_summary()},'hint':hints.get(category,'查看具体错误类型和该命令帮助；首页返回200不能证明同一查询可用。')}
     if help_only:return {'ok':True,'command':command,'help':stdout[:30000],'requirements':entry}
     if len(stdout)>1500000:return {'ok':False,'error':'response_too_large','message':'返回过大，请减少数量、时间范围或分页。'}
@@ -95,6 +95,7 @@ def query(command,args=None,timeout=90,help_only=False):
     return result
 
 def main():
+    if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
     parser=argparse.ArgumentParser(description='Research MCP release CLI')
     parser.add_argument('command');parser.add_argument('args',nargs=argparse.REMAINDER)
     a=parser.parse_args()

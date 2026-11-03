@@ -88,6 +88,7 @@ def pause(paused=True):
     return status() if paused else next_step()
 
 def main():
+    if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
     parser=argparse.ArgumentParser();sub=parser.add_subparsers(dest='action',required=True)
     sub.add_parser('status');sub.add_parser('next');p=sub.add_parser('mode');p.add_argument('mode',choices=['partial','full'])
     p=sub.add_parser('credential');p.add_argument('source',choices=[k for k in PROVIDERS if k not in ('institution','public-files','other-keys')])
