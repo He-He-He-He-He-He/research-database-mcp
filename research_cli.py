@@ -85,7 +85,7 @@ def query(command,args=None,timeout=90,help_only=False):
             if entry.get('count_option'):hint+=' 本命令使用 '+entry['count_option']+'。'
             return {'ok':False,'command':command,'error':'invalid_arguments','message':message[:1000],'usage':details.get('usage',entry.get('usage','')),'supported_options':details.get('supported_options',[]),'hint':hint,'example_args':entry.get('example_args'),'diagnostics':{'kind':'invalid_arguments'}}
         mapping={'http_status':'upstream_http_error','tls_error':'network_tls_error','tls_configuration_error':'network_tls_error','proxy_error':'network_proxy_error','dns_error':'network_dns_error','connection_error':'network_connection_error','network_timeout':'upstream_timeout','transport_unavailable':'missing_transport','invalid_json_response':'upstream_response_error','invalid_response':'upstream_response_error','redirect_error':'upstream_redirect_error','response_too_large':'response_too_large'}
-        if entry.get('credential') and re.search(r'需要.*(?:密钥|凭据|API_KEY)|未配置.*(?:密钥|凭据)|尚未配置.*凭据|(?:missing|required|not configured).*(?:api.?key|credential)',message,re.I):category='credential_required'
+        if entry.get('credential') and re.search(r'需要.*(?:密钥|凭据|API_KEY)|(?:未配置|无法读取|缺少).*(?:密钥|凭据)|(?:密钥|凭据).*(?:未配置|未找到|不存在)|(?:missing|required|not configured).*(?:api.?key|credential)',message,re.I):category='credential_required'
         elif kind in mapping:category=mapping[kind]
         elif 'ModuleNotFoundError' in stderr or details.get('exception_type')=='ModuleNotFoundError':category='missing_dependency'
         elif 'FileNotFoundError' in stderr or details.get('exception_type')=='FileNotFoundError':category='missing_public_resource'

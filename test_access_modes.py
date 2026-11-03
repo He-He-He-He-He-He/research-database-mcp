@@ -46,6 +46,10 @@ class AccessChecks(unittest.TestCase):
             r=cli.query(key['command'],['electricity']);self.assertEqual(r['required_mode'],'login')
         setup.select('zju')
         with mock.patch.object(cli.subprocess,'run',return_value=self.success()):self.assertTrue(cli.query(institution['command'],['test'])['ok'])
+        setup.select('login')
+        missing=subprocess.CompletedProcess([],1,'',json.dumps({'error':'无法读取本机 EIA 密钥','diagnostics':{'exception_type':'RuntimeError'}}))
+        with mock.patch.object(cli.subprocess,'run',side_effect=[self.success(),missing]):
+            r=cli.query('eia-v2-browse',['electricity']);self.assertEqual(r['error'],'credential_required');self.assertNotIn('skipped',r)
     def test_no_credentials_read_in_general_or_zju(self):
         for mode in ('general','zju'):
             setup.select(mode)
