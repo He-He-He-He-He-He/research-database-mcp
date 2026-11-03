@@ -112,3 +112,16 @@ python3 -B test_distribution.py
 源码工作目录含 `.git` 时，严格校验会报告额外文件；可先用 `pack_release.py` 导出、解压到临时目录再验证。离线检查不替代所有源站的实时验收。
 
 提交 issue/PR 时只附可公开的最小复现条件和脱敏错误，不上传个人配置、令牌、会话、机构证明、下载材料或私人研究结果。先尊重用户现有配置，再处理目标来源。
+
+## v1.2.0：错误契约与质量检查
+
+`diagnostics.py` 统一生成简短参数错误和脱敏来源诊断。参数错误保留 `usage`/`supported_options`，数值数量参数可从起步命令的 `count_option` 读取。MCP 工具保持五个，查询结果补充 `result_kind`、`partial` 和必要的 `warnings`。
+
+网络异常只添加诊断，不改变已确认正常的适配器传输逻辑。`doctor.py` 提供版本/环境及单命令检查；`public_check.py` 是显式运行的公开样例检查，使用临时 partial 状态，不读取用户实际凭据、不保存研究内容。
+
+```sh
+python3 -B test_diagnostics.py
+python3 -B public_check.py --suite all --output /path/outside/package/validation.json
+```
+
+网络检查结果受来源状态影响，不与离线回归混为一谈。GitHub Actions 在 Linux、macOS、Windows 运行离线检查，并在 Linux 抽样请求公开接口；联网失败会写入独立报告，不能只看工作流的绿色状态判断所有来源可用。

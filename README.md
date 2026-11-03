@@ -4,13 +4,21 @@
 
 你提出研究问题，AI 通过这个 MCP 发现数据源、确认查询参数、发起实际请求，再把返回结果整理成带出处的回答。它提供可重复使用的查询能力；需要什么，再查什么。
 
-**[下载最新版本](https://github.com/He-He-He-He-He-He/research-database-mcp/releases/latest)** · **[直接下载 v1.1.1 ZIP](https://github.com/He-He-He-He-He-He/research-database-mcp/releases/download/v1.1.1/research-database-mcp-v1.1.1.zip)** · [安装教程](docs/QUICKSTART.md) · [数据源与能力清单](docs/DATA_SOURCES.md) · [使用示例](docs/EXAMPLES.md) · [常见问题](docs/TROUBLESHOOTING.md)
+**[下载最新版本](https://github.com/He-He-He-He-He-He/research-database-mcp/releases/latest)** · **[直接下载 v1.2.0 ZIP](https://github.com/He-He-He-He-He-He/research-database-mcp/releases/download/v1.2.0/research-database-mcp-v1.2.0.zip)** · [安装教程](docs/QUICKSTART.md) · [数据源与能力清单](docs/DATA_SOURCES.md) · [使用示例](docs/EXAMPLES.md) · [常见问题](docs/TROUBLESHOOTING.md)
 
 | 免登录起步 | MCP 工具 | 可选 API 引导 | 配置进度 |
 |---|---|---|---|
-| 37 个查询/元数据命令 | 5 个统一工具 | 13 个来源/产品项 | 可跳过、暂停、恢复 |
+| 42 个查询/元数据命令 | 5 个统一工具 | 13 个来源/产品项 | 可跳过、暂停、恢复 |
 
 > 当前定位：以 macOS 为主要验证平台的研究工具包。扩展索引保留了大量待配置、待适配或待实测的代码；请按能力分层使用。**3,753 个命令入口不等于 3,753 个可用数据库。**
+
+### v1.2.0 的重点
+
+- 修复错误参数被误报为上游故障的问题，提供短错误、当前命令 usage 和正确数量参数提示。
+- partial 新增开放 5 个已有国家统计局公开命令，能按官方代码查询年/月/季数值。
+- 发现结果区分目录、元数据、题录和数值；支持 `kind="observations"` 筛选。
+- 配置恢复记住正在处理的来源，升级保留暂停状态。
+- 新增脱敏诊断、参数回归与跨系统质量检查。[查看验证范围](docs/VALIDATION.md)。
 
 ## 可以帮你做什么？
 
@@ -64,7 +72,7 @@ python3 -B install.py --mode partial
 | | `partial` 部分功能 | `full` 全部可选功能 |
 |---|---|---|
 | 适合谁 | 希望先使用无需账号的公开查询 | 希望逐步配置更多来源 |
-| 起步接口 | 37 个免登录命令 | 同样可用 |
+| 起步接口 | 42 个免登录命令 | 同样可用 |
 | 扩展命令 | 未开放；调用时提示切换模式 | 允许尝试，但仍须满足相应要求 |
 | 注册/密钥 | 无需数据库账号或 API 密钥 | 仅为你需要的来源配置自己的账号/凭据 |
 | 中途暂停 | 可以直接使用现有能力 | 可以暂停、跳过等待项、以后继续 |
@@ -84,7 +92,7 @@ python3 -B install.py --mode partial
 
 能力分为三层：
 
-1. **免登录起步层**：37 个命令，涵盖公开统计、学术题录、法律检索、气候与地震数据等；提供命令清单与使用示例。
+1. **免登录起步层**：42 个命令，涵盖公开统计、学术题录、法律检索、气候与地震数据等；提供命令清单与使用示例。
 2. **可选 API 配置层**：为 EIA、CiNii、ASEANstats、UNDP、Elsevier、WTO、Springer、Web of Science Starter、IOM 两类产品、IATI、联合国人口、CAS Common Chemistry 提供逐步引导和测试入口。
 3. **扩展代码层**：其他公开/机构来源、浏览器响应辅助模块与文件解析器。部分需要自己的机构访问、公开文件、额外依赖或源站适配；保留代码不等于验收完成。
 
@@ -120,13 +128,15 @@ IP 认证取决于 **MCP 实际运行的机器**。该机器处在学校认可�
 
 发行版具备 18 项离线自检和 8 项分发回归检查。此前已完成公开来源的抽样实测，以及独立目录全新安装、免登录查询和跨进程暂停恢复验证；它们不能证明每个扩展命令或源站始终可用。详见 [验收说明](验收说明.md) 与 [功能边界与隐私](功能边界与隐私.md)。
 
+42 项离线检查与公开查询样例分开统计，具体系统和来源结果见 [验证记录](docs/VALIDATION.md)。
+
 ## 文档导航
 
 | 文档 | 阅读目的 |
 |---|---|
 | [快速开始](docs/QUICKSTART.md) | 安装、连接客户端、确认首次查询 |
 | [使用示例](docs/EXAMPLES.md) | 自然语言提问、完整工具调用和结果核对 |
-| [数据源清单](docs/DATA_SOURCES.md) | 免登录 37 命令、可选 API 和扩展能力分层 |
+| [数据源清单](docs/DATA_SOURCES.md) | 免登录 42 命令、可选 API 和扩展能力分层 |
 | [配置与暂停恢复](docs/CONFIGURATION.md) | 逐项注册/申请、保存凭据、跳过、暂停、恢复 |
 | [常见问题](docs/TROUBLESHOOTING.md) | 模式、连接、校园网、登录、网络、缺依赖和缺文件 |
 | [架构与开发](docs/ARCHITECTURE.md) | 工具接口、返回结构、目录、扩展与分发检查 |

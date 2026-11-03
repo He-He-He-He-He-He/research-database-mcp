@@ -6,6 +6,7 @@ Census 2021 covers England and Wales, not all of the UK. Official API is beta.
 import release_runtime
 import re
 import requests
+from diagnostics import SourceError
 BASE = 'https://api.beta.ons.gov.uk/v1/'
 
 def _part(value):
@@ -14,9 +15,13 @@ def _part(value):
     return value
 
 def _get(path, params=None):
-    r = requests.get(BASE + path, params=params, timeout=30)
-    r.raise_for_status()
-    return r.json()
+    from diagnostics import request_error, SourceError
+    try:
+        r = requests.get(BASE + path, params=params, timeout=30)
+        r.raise_for_status()
+    except requests.RequestException as exc:raise request_error(exc,BASE+path) from None
+    try:return r.json()
+    except ValueError:raise SourceError('invalid_json_response','ONS 返回非 JSON',url=BASE+path,transport='requests') from None
 
 def catalogue(limit=20, offset=0):
     if any((isinstance(x, bool) or not isinstance(x, int) for x in (limit, offset))) or not 1 <= limit <= 100 or offset < 0:
@@ -38,8 +43,8 @@ def discover(keyword, offset=0, max_pages=4, limit=30):
     while pages < max_pages:
         try:
             batch = catalogue(100, cursor)
-        except (requests.RequestException, ValueError) as exc:
-            errors.append({'offset': cursor, 'error': type(exc).__name__})
+        except (SourceError, ValueError) as exc:
+            errors.append({'offset':cursor,'error':str(exc),'diagnostics':exc.as_dict() if isinstance(exc,SourceError) else {'kind':'invalid_response'}})
             break
         if not isinstance(batch, dict) or not isinstance(batch.get('items'), list) or type(batch.get('total_count')) is not int:
             errors.append({'offset': cursor, 'error': 'invalid response'})
@@ -55,6 +60,9 @@ def discover(keyword, offset=0, max_pages=4, limit=30):
         cursor += len(rows)
         if not rows or cursor >= total:
             break
+    if errors and pages==0:
+        info=errors[0].get('diagnostics',{'kind':'invalid_response'})
+        raise SourceError(info.get('kind','invalid_response'),errors[0]['error'],url=BASE+'datasets',status=info.get('http_status'),transport=info.get('transport'))
     complete = bool(totals) and (not errors) and (len(set(totals)) == 1) and (cursor >= totals[-1]) and (offset == 0)
     return {'source': 'UK Office for National Statistics', 'keyword': keyword.strip(), 'start_offset': offset, 'scanned': scanned, 'pages': pages, 'observed_totals': totals, 'matching_scanned': len(matches), 'items': matches[:limit], 'matches_truncated': len(matches) > limit, 'next_offset': cursor if errors or not totals or cursor < totals[-1] else None, 'failed_pages': errors, 'complete_from_start': complete, 'note': '仅在已扫描的数据集 ID、标题与描述中本地匹配；目录与排序可能更新，未扫描或失败页不代表无匹配。'}
 

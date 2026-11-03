@@ -36,7 +36,7 @@ def query(command,args=None,timeout=90,help_only=False):
     if not help_only and state['mode'] is None:
         return {'ok':False,'error':'choose_mode','message':'请先用 research_setup 选择 partial 或 full。'}
     if not help_only and state['mode']=='partial' and not entry.get('starter'):
-        return {'ok':False,'error':'optional_setup_required','message':'这个命令属于扩展功能；切换full可逐项配置，免登录功能仍可使用。','requirements':entry}
+        return {'ok':False,'command':command,'error':'optional_setup_required','message':'当前 partial 模式未开放此扩展命令。','required_mode':'full','hint':'可切换 full 查看此命令的实际要求；切换模式本身不要求注册或付费。无需的来源可以跳过。','requirements':entry}
     if help_only:args=['--help']
     # A small orphaned official adapter is exposed through a proper CLI bridge.
     target='cas_bridge.py' if command.startswith('cas-common-') else 'engine/research.py'
@@ -45,22 +45,46 @@ def query(command,args=None,timeout=90,help_only=False):
     environment['RESEARCH_MCP_ENGINE']='1'
     environment['PYTHONPATH']=str(ROOT)+os.pathsep+str(ROOT/'engine')
     try:
-        p=subprocess.run([sys.executable,str(ROOT/target),command,*args],cwd=ROOT,env=environment,capture_output=True,text=True,timeout=min(120,max(5,int(timeout))))
+        p=subprocess.run([sys.executable,str(ROOT/target),command,*args],cwd=ROOT,env=environment,capture_output=True,text=True,encoding='utf-8',timeout=min(120,max(5,int(timeout))))
     except subprocess.TimeoutExpired:
         return {'ok':False,'error':'upstream_timeout','message':'上游超时；保留配置进度，可以先用其他来源。','command':command}
     stdout,stderr=scrub(p.stdout),scrub(p.stderr)
     if p.returncode:
-        category='upstream_or_configuration_error'
-        if 'ModuleNotFoundError' in stderr:category='missing_dependency'
-        if 'FileNotFoundError' in stderr:category='missing_public_resource'
-        return {'ok':False,'command':command,'error':category,'message':stderr[-3000:] or stdout[-3000:],'hint':'查阅命令帮助与需求标记；需要公开文件时请自行获取，不能把缺文件解释为无数据。'}
+        from diagnostics import environment_summary
+        category='upstream_or_configuration_error';details={};message=stderr[-3000:] or stdout[-3000:]
+        try:
+            body=json.loads(stderr.strip() or stdout.strip())
+            if isinstance(body,dict):
+                message=str(body.get('error',message));details=body.get('diagnostics') or {}
+        except (ValueError,TypeError):pass
+        kind=details.get('kind')
+        if kind=='invalid_arguments' or p.returncode==2:
+            if kind!='invalid_arguments':
+                matches=re.findall(r'(?:^|\n)[^\n]*?: error: ([^\n]+)',stderr)
+                if matches:message=matches[-1]
+            hint='调用 research_help(command='+json.dumps(command,ensure_ascii=False)+') 查看本命令参数；不同来源的数量参数并不相同。'
+            if entry.get('count_option'):hint+=' 本命令使用 '+entry['count_option']+'。'
+            return {'ok':False,'command':command,'error':'invalid_arguments','message':message[:1000],'usage':details.get('usage',entry.get('usage','')),'supported_options':details.get('supported_options',[]),'hint':hint,'example_args':entry.get('example_args'),'diagnostics':{'kind':'invalid_arguments'}}
+        mapping={'http_status':'upstream_http_error','tls_error':'network_tls_error','tls_configuration_error':'network_tls_error','proxy_error':'network_proxy_error','dns_error':'network_dns_error','connection_error':'network_connection_error','network_timeout':'upstream_timeout','transport_unavailable':'missing_transport','invalid_json_response':'upstream_response_error','invalid_response':'upstream_response_error','redirect_error':'upstream_redirect_error','response_too_large':'response_too_large'}
+        if kind in mapping:category=mapping[kind]
+        elif 'ModuleNotFoundError' in stderr or details.get('exception_type')=='ModuleNotFoundError':category='missing_dependency'
+        elif 'FileNotFoundError' in stderr or details.get('exception_type')=='FileNotFoundError':category='missing_public_resource'
+        elif details.get('exception_type')=='ValueError':category='invalid_arguments_or_response'
+        hints={'missing_dependency':'此命令缺少依赖库；按缺失库安装，必要时使用 --extras。','missing_public_resource':'此命令需要公开文件；请根据帮助提供文件。缺文件不代表无数据。','upstream_http_error':'检查具体接口返回的 HTTP 状态、来源访问条件和限流提示。','network_tls_error':'检查运行环境的证书链和 CA 设置；不要关闭证书校验。','network_proxy_error':'检查当前进程的代理配置，不要公开代理凭据。','network_dns_error':'检查运行环境是否能解析具体接口域名。','upstream_timeout':'缩小查询或稍后再试；先保留配置并使用其他来源。'}
+        return {'ok':False,'command':command,'error':category,'message':message,'diagnostics':{**details,'environment':environment_summary()},'hint':hints.get(category,'查看具体错误类型和该命令帮助；首页返回200不能证明同一查询可用。')}
     if help_only:return {'ok':True,'command':command,'help':stdout[:30000],'requirements':entry}
     if len(stdout)>1500000:return {'ok':False,'error':'response_too_large','message':'返回过大，请减少数量、时间范围或分页。'}
     try:value=json.loads(stdout)
     except json.JSONDecodeError:
         return {'ok':False,'command':command,'error':'unexpected_output','message':'没有取得可验证的JSON结果；可能是帮助、页面变化或登录拦截。','preview':stdout[:1500]}
     failure=isinstance(value,dict) and (value.get('ok') is False or value.get('success') is False or bool(value.get('error')) or value.get('status') in ('error','blocked','unavailable'))
-    return {'ok':not failure,'command':command,'result':value,'requirements':entry,'source':'research-mcp','verification':'真实命令返回；不代表机构授权、完整覆盖或其他参数已通过。'}
+    partial=isinstance(value,dict) and bool(value.get('failed_pages'))
+    if partial and value.get('pages',value.get('scanned',0))==0:failure=True
+    result={'ok':not failure,'command':command,'result':value,'requirements':entry,'source':'research-mcp','partial':partial,'result_kind':entry.get('result_kind','unclassified'),'verification':'真实命令返回；目录、元数据与数值不同，单次成功不代表完整覆盖、机构授权或其他参数通过。'}
+    if partial:
+        result['warnings']=['部分请求失败，结果不完整；请查看result.failed_pages。']
+        if failure:result['error']='upstream_scan_failed'
+    return result
 
 def main():
     parser=argparse.ArgumentParser(description='Research MCP release CLI')

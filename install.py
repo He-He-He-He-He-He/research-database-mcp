@@ -40,7 +40,9 @@ def install(root,destination,mode,config_only=False,extras=False):
     else:python=Path(sys.executable).absolute()
     os.environ['RESEARCH_MCP_STATE_DIR']=str(state)
     import onboarding
+    previous=onboarding.rt.load_state()
     onboarding.select(mode)
+    if previous.get('paused'):onboarding.pause(True)
     entry={'command':str(python),'args':['-B',str(app/'research_mcp.py')],'env':{'RESEARCH_MCP_STATE_DIR':str(state),'PYTHONDONTWRITEBYTECODE':'1'}}
     config={'mcpServers':{'research-databases':entry}}
     connection=destination/'connection';connection.mkdir(exist_ok=True)

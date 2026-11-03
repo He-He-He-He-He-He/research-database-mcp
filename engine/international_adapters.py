@@ -9,7 +9,8 @@ def _curl(url):
     config = 'url = "' + url.replace('\\', '\\\\').replace('"', '\\"') + '"\n'
     result = release_runtime.run(['/usr/bin/curl', '--silent', '--show-error', '--fail', '--max-time', '25', '--config', '-'], input=config, text=True, capture_output=True)
     if result.returncode:
-        raise RuntimeError('请求失败（curl 状态 %s）；请检查网络、上游状态与授权' % result.returncode)
+        from diagnostics import curl_error
+        raise curl_error(result.returncode,url,result.stderr)
     return result.stdout
 
 def _json(url):

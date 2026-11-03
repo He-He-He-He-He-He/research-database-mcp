@@ -2,10 +2,10 @@
   "python_modules": 2281,
   "browser_modules": 375,
   "commands": 3753,
-  "institution_specific": 249,
-  "may_need_public_file": 829,
+  "institution_specific": 244,
+  "may_need_public_file": 824,
   "bundled_private_data": false,
-  "starter_commands": 37,
-  "release_version": "1.1.1",
+  "starter_commands": 42,
+  "release_version": "1.2.0",
   "runtime_location": "outside-distribution"
 }

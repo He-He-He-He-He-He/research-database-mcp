@@ -34,7 +34,8 @@ def earthquakes(start, end, min_magnitude=5, limit=50, *, bbox=None, offset=1):
     url = URL + '?' + urlencode(params)
     p = release_runtime.run(['curl', '--fail', '--silent', '--show-error', '--location', '--max-time', '25', url], capture_output=True, text=True, timeout=30)
     if p.returncode:
-        raise RuntimeError('USGS 地震目录请求失败: ' + p.stderr.strip())
+        from diagnostics import curl_error
+        raise curl_error(p.returncode,url,p.stderr)
     d = json.loads(p.stdout)
     if d.get('type') != 'FeatureCollection' or not isinstance(d.get('features'), list):
         raise RuntimeError('USGS 地震目录响应结构异常')

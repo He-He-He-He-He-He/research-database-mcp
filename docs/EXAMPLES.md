@@ -199,3 +199,29 @@ BIS 数据流发现：
 建议要求 AI 至少保留：来源/链接、执行的筛选条件、时间与地域、单位/指标定义、分页与截断、缺失值、结果中的警示字段。
 
 `ok: true` 表示工具执行得到相应返回，不代表数据完整、字段已被人工核验或所有查询条件都获得授权。若得到目录、帮助页或零结果，AI 应如实说明，并继续选择适合的查询步骤。
+
+## 9. 免登录查询中国官方数值（v1.2.0）
+
+现在 partial 可用国家统计局指标发现、元数据和年/月/季查询，不必为了这些公开接口申请密钥。
+
+先用 `research_discover` 将数值与目录分开：
+
+```json
+{"keyword":"中国宏观 GDP","starter_only":true,"kind":"observations","limit":5}
+```
+
+用 `research_query` 找到对应指标：
+
+```json
+{"command":"nbs-frequency-discover","args":["国内生产总值","annual","--size","20"]}
+```
+
+核对候选的名称、单位、频率和地区。用所选候选实际返回的 `catalog_id`、`indicator_id`、`root_id` 替换下面三个占位符；不要凭名称猜代码，也不要直接把下方占位符发给查询工具：
+
+```json
+{"command":"nbs-frequency-series","args":["<catalog_id>","<indicator_id>","<root_id>","annual","2020","2023","--region-code","000000000000","--region-name","全国"]}
+```
+
+也可用 `nbs-annual-discover` → `nbs-annual-metadata` → `nbs-annual-series`。查询月度指标时，发现步骤选择 `monthly`，日期写成 `2024-01`；季度使用 `quarterly` 及 `2024Q1`。必须核对指数基期、同比/环比、现价/不变价，以及累计值与单月值，不能因取到了数字就混用口径。
+
+`nbs-macro-list` 仍只是报告标题入口；它与这些数值命令的职责不同。

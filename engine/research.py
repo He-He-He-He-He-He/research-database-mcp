@@ -14,7 +14,8 @@ def fetch(url, body=None):
     args += [url]
     result = release_runtime.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if result.returncode:
-        raise RuntimeError('上游连接失败（curl 状态 %s）：%s' % (result.returncode, result.stderr.decode('utf-8', errors='replace').strip()))
+        from diagnostics import curl_error
+        raise curl_error(result.returncode,url,result.stderr)
     return result.stdout.decode('utf-8')
 
 def get(url, params=None, body=None):
@@ -97,7 +98,8 @@ def catalog():
     return list(p.items.values())
 
 def main():
-    p = argparse.ArgumentParser(description='研究数据库只读工具（输出 JSON）')
+    from diagnostics import CommandParser
+    p = CommandParser(description='研究数据库只读工具（输出 JSON）')
     sub = p.add_subparsers(dest='cmd', required=True)
     sub.add_parser('sources')
     x = sub.add_parser('source-find')
@@ -21201,5 +21203,6 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as e:
-        print(json.dumps({'error': str(e), 'note': '请检查网络、上游状态及登录要求；未自动重试'}, ensure_ascii=False), file=sys.stderr)
-        sys.exit(1)
+        from diagnostics import error_payload, InvalidArguments
+        print(json.dumps(error_payload(e),ensure_ascii=False),file=sys.stderr)
+        sys.exit(2 if isinstance(e,InvalidArguments) else 1)

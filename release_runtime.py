@@ -11,6 +11,8 @@ def subprocess_environment():
     root=Path(__file__).resolve().parent
     env['PYTHONPATH']=str(root)+os.pathsep+str(root/'engine')
     env['PYTHONDONTWRITEBYTECODE']='1'
+    env['PYTHONUTF8']='1'
+    env['PYTHONIOENCODING']='utf-8'
     env['NETRC']=str(state_root()/'no-user-netrc')
     return env
 
@@ -30,7 +32,7 @@ def state_root():
 def load_state():
     p=state_root()/'progress.json'
     if not p.exists():return {'schema':1,'mode':None,'progress':{}}
-    d=json.loads(p.read_text())
+    d=json.loads(p.read_text(encoding='utf-8'))
     if d.get('schema')!=1 or d.get('mode') not in (None,'partial','full') or not isinstance(d.get('progress'),dict):raise ValueError('配置进度格式异常，请保留文件后检查')
     return d
 
@@ -38,7 +40,7 @@ def save_state(d):
     root=state_root();root.mkdir(parents=True,exist_ok=True,mode=0o700)
     fd,tmp=tempfile.mkstemp(dir=root,prefix='.progress-',text=True)
     try:
-        with os.fdopen(fd,'w') as f:json.dump(d,f,ensure_ascii=False,indent=2)
+        with os.fdopen(fd,'w',encoding='utf-8') as f:json.dump(d,f,ensure_ascii=False,indent=2)
         os.replace(tmp,root/'progress.json')
     finally:
         if os.path.exists(tmp):os.unlink(tmp)

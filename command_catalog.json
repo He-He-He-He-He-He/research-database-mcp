@@ -1088,7 +1088,14 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "example_args": [
+        "--page",
+        "1"
+      ],
+      "description": "经济运行报告标题目录，不直接返回指标数值。"
     },
     {
       "command": "nbs-macro-detail",
@@ -1327,55 +1334,138 @@
       "modules": [
         "nbs_publicrelease_chain_adapter"
       ],
-      "credential": true,
-      "institution": true,
-      "may_need_public_file": true,
-      "starter": false,
-      "readiness": "user-key-required"
+      "credential": false,
+      "institution": false,
+      "may_need_public_file": false,
+      "starter": true,
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "count_option": "--size",
+      "topics": [
+        "中国",
+        "宏观",
+        "GDP",
+        "国内生产总值",
+        "PMI",
+        "CPI",
+        "PPI",
+        "社零",
+        "社会消费品零售总额"
+      ],
+      "description": "国家统计局公开指标发现、元数据与年/月/季度数值查询；需要核对频率、单位、地区与累计口径。",
+      "example_args": [
+        "制造业采购经理指数",
+        "monthly",
+        "--size",
+        "10"
+      ]
     },
     {
       "command": "nbs-frequency-series",
       "modules": [
         "nbs_publicrelease_chain_adapter"
       ],
-      "credential": true,
-      "institution": true,
-      "may_need_public_file": true,
-      "starter": false,
-      "readiness": "user-key-required"
+      "credential": false,
+      "institution": false,
+      "may_need_public_file": false,
+      "starter": true,
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations",
+      "topics": [
+        "中国",
+        "宏观",
+        "GDP",
+        "国内生产总值",
+        "PMI",
+        "CPI",
+        "PPI",
+        "社零",
+        "社会消费品零售总额"
+      ],
+      "description": "国家统计局公开指标发现、元数据与年/月/季度数值查询；需要核对频率、单位、地区与累计口径。"
     },
     {
       "command": "nbs-annual-discover",
       "modules": [
         "nbs_publicrelease_chain_adapter"
       ],
-      "credential": true,
-      "institution": true,
-      "may_need_public_file": true,
-      "starter": false,
-      "readiness": "user-key-required"
+      "credential": false,
+      "institution": false,
+      "may_need_public_file": false,
+      "starter": true,
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "count_option": "--size",
+      "topics": [
+        "中国",
+        "宏观",
+        "GDP",
+        "国内生产总值",
+        "PMI",
+        "CPI",
+        "PPI",
+        "社零",
+        "社会消费品零售总额"
+      ],
+      "description": "国家统计局公开指标发现、元数据与年/月/季度数值查询；需要核对频率、单位、地区与累计口径。",
+      "example_args": [
+        "国内生产总值",
+        "--size",
+        "3"
+      ]
     },
     {
       "command": "nbs-annual-metadata",
       "modules": [
         "nbs_publicrelease_chain_adapter"
       ],
-      "credential": true,
-      "institution": true,
-      "may_need_public_file": true,
-      "starter": false,
-      "readiness": "user-key-required"
+      "credential": false,
+      "institution": false,
+      "may_need_public_file": false,
+      "starter": true,
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata",
+      "topics": [
+        "中国",
+        "宏观",
+        "GDP",
+        "国内生产总值",
+        "PMI",
+        "CPI",
+        "PPI",
+        "社零",
+        "社会消费品零售总额"
+      ],
+      "description": "国家统计局公开指标发现、元数据与年/月/季度数值查询；需要核对频率、单位、地区与累计口径。"
     },
     {
       "command": "nbs-annual-series",
       "modules": [
         "nbs_publicrelease_chain_adapter"
       ],
-      "credential": true,
-      "institution": true,
-      "may_need_public_file": true,
-      "starter": false,
-      "readiness": "user-key-required"
+      "credential": false,
+      "institution": false,
+      "may_need_public_file": false,
+      "starter": true,
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations",
+      "topics": [
+        "中国",
+        "宏观",
+        "GDP",
+        "国内生产总值",
+        "PMI",
+        "CPI",
+        "PPI",
+        "社零",
+        "社会消费品零售总额"
+      ],
+      "description": "国家统计局公开指标发现、元数据与年/月/季度数值查询；需要核对频率、单位、地区与累计口径。"
     },
     {
       "command": "stats-search",
@@ -1424,7 +1514,15 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "text_search",
+      "count_option": "--size",
+      "example_args": [
+        "消费者权益保护法",
+        "--size",
+        "1"
+      ]
     },
     {
       "command": "chinajob-search",
@@ -1757,7 +1855,16 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "count_option": "--size",
+      "example_args": [
+        "renewable energy",
+        "--size",
+        "1"
+      ],
+      "description": "文献ID检索；取得ID后用pubmed-summary获取题录概要。"
     },
     {
       "command": "pubmed-abstracts",
@@ -1777,7 +1884,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "bibliographic"
     },
     {
       "command": "sport-economy",
@@ -2433,7 +2542,10 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "example_args": []
     },
     {
       "command": "spp-report-detail",
@@ -17645,7 +17757,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "faostat-api-domains",
@@ -17656,7 +17770,15 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "count_option": "--limit",
+      "example_args": [
+        "--limit",
+        "1"
+      ],
+      "description": "数据目录发现；需要后续维度、代码及observations命令取得数值。"
     },
     {
       "command": "faostat-api-codes",
@@ -17667,7 +17789,10 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata",
+      "count_option": "--limit"
     },
     {
       "command": "faostat-api-data",
@@ -17678,7 +17803,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations"
     },
     {
       "command": "wb-ida-credits-latest",
@@ -20380,7 +20507,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "nasa-power-monthly",
@@ -28345,7 +28474,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog"
     },
     {
       "command": "wb-indicator",
@@ -28354,7 +28485,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "wb-series",
@@ -28365,7 +28498,17 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations",
+      "example_args": [
+        "FRA",
+        "SP.POP.TOTL",
+        "--start",
+        "2020",
+        "--end",
+        "2023"
+      ]
     },
     {
       "command": "disability-yearbooks",
@@ -30344,7 +30487,18 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations",
+      "count_option": "--limit",
+      "example_args": [
+        "2024-01-01",
+        "2024-01-02",
+        "--min-magnitude",
+        "5",
+        "--limit",
+        "1"
+      ]
     },
     {
       "command": "nsfc-results",
@@ -33420,7 +33574,15 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations",
+      "example_args": [
+        "0",
+        "0",
+        "2024-01-01",
+        "2024-01-02"
+      ]
     },
     {
       "command": "un-population-metadata",
@@ -33911,7 +34073,10 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "example_args": []
     },
     {
       "command": "ncbi-database-info",
@@ -33933,7 +34098,10 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "count_option": "--size"
     },
     {
       "command": "ncbi-summaries",
@@ -33944,7 +34112,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "bibliographic"
     },
     {
       "command": "nih-reporter",
@@ -34087,7 +34257,13 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "example_args": [
+        "exchange"
+      ],
+      "description": "数据目录发现；需要后续维度、代码及observations命令取得数值。"
     },
     {
       "command": "bis-structure",
@@ -34098,7 +34274,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "bis-series",
@@ -34109,7 +34287,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations"
     },
     {
       "command": "ecb-dataflows",
@@ -36488,7 +36668,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "bibliographic"
     },
     {
       "command": "arxiv",
@@ -36497,7 +36679,15 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "bibliographic",
+      "count_option": "--size",
+      "example_args": [
+        "renewable energy",
+        "--size",
+        "1"
+      ]
     },
     {
       "command": "epmc-open-search",
@@ -36588,7 +36778,10 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "bibliographic",
+      "count_option": "--rows"
     },
     {
       "command": "crossref-work",
@@ -36599,7 +36792,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "bibliographic"
     },
     {
       "command": "crossref",
@@ -36610,7 +36805,15 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "bibliographic",
+      "count_option": "--rows",
+      "example_args": [
+        "renewable energy",
+        "--rows",
+        "1"
+      ]
     },
     {
       "command": "crossref-journals",
@@ -37721,7 +37924,18 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "count_option": "--limit",
+      "example_args": [
+        "population",
+        "--max-pages",
+        "1",
+        "--limit",
+        "1"
+      ],
+      "description": "数据目录发现；需要后续维度、代码及observations命令取得数值。"
     },
     {
       "command": "ons-editions",
@@ -37732,7 +37946,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "ons-dimensions",
@@ -37743,7 +37959,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "ons-options",
@@ -37754,7 +37972,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "ons-metadata",
@@ -37765,7 +37985,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "ons-observations",
@@ -37776,7 +37998,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations"
     },
     {
       "command": "ons-census",
@@ -37963,7 +38187,17 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "catalog",
+      "count_option": "--top",
+      "example_args": [
+        "--query",
+        "population",
+        "--top",
+        "1"
+      ],
+      "description": "数据目录发现；需要后续维度、代码及observations命令取得数值。"
     },
     {
       "command": "cbs-properties",
@@ -37974,7 +38208,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "cbs-dimensions",
@@ -37985,7 +38221,9 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata"
     },
     {
       "command": "cbs-codes",
@@ -37996,7 +38234,10 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "metadata",
+      "count_option": "--top"
     },
     {
       "command": "cbs-observations",
@@ -38007,7 +38248,10 @@
       "institution": false,
       "may_need_public_file": false,
       "starter": true,
-      "readiness": "starter-public"
+      "readiness": "starter-public",
+      "access": "public",
+      "result_kind": "observations",
+      "count_option": "--top"
     },
     {
       "command": "mem-disasters-catalog",

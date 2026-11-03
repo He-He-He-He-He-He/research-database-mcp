@@ -14,9 +14,13 @@ def search(query, size=5, offset=0):
     try:
         response = requests.get(URL, params=params, timeout=25)
         response.raise_for_status()
-        body = response.json()
-    except (requests.RequestException, ValueError):
-        raise RuntimeError('PubMed 请求失败或返回非 JSON') from None
+    except requests.RequestException as exc:
+        from diagnostics import request_error
+        raise request_error(exc,URL) from None
+    try:body=response.json()
+    except ValueError:
+        from diagnostics import SourceError
+        raise SourceError('invalid_json_response','PubMed 返回非 JSON',url=URL,transport='requests') from None
     result = body.get('esearchresult') if isinstance(body, dict) else None
     if not isinstance(result, dict) or not isinstance(result.get('idlist'), list):
         raise RuntimeError('PubMed 检索响应结构异常')

@@ -33,7 +33,7 @@ GUIDE={
 }
 
 def status():
-    s=rt.load_state();return {'mode':s['mode'],'needs_choice':s['mode'] is None,'paused':s.get('paused',False),'progress':s['progress'],'state_location':str(rt.state_root()),'notice':'全部功能表示逐步配置本包可选能力，不等于每个数据库已授权或全量可用。'}
+    s=rt.load_state();return {'mode':s['mode'],'needs_choice':s['mode'] is None,'paused':s.get('paused',False),'active_source':s.get('active_source'),'progress':s['progress'],'state_location':str(rt.state_root()),'notice':'全部功能表示逐步配置本包可选能力，不等于每个数据库已授权或全量可用。'}
 
 def select(mode):
     if mode not in ('partial','full'):raise ValueError('mode 须为 partial 或 full')
@@ -42,10 +42,16 @@ def select(mode):
 
 def next_step(source=None):
     s=rt.load_state()
+    if source is not None:
+        if source not in PROVIDERS:raise ValueError('未知来源')
+        s['active_source']=source
+        if source in s['progress']:s['progress'][source]['skipped']=False
+        rt.save_state(s)
     if s.get('paused'):return {'action':'paused','message':'配置进度已保存；已有功能可以继续使用。下次调用 research_setup(action="resume") 即可继续。'}
     if s['mode'] is None:return {'action':'ask_mode','question':'使用免登录的部分功能，还是逐步配置全部可选功能？','choices':['partial','full']}
     if s['mode']=='partial':return {'action':'ready','message':'免登录模式可直接查询起步公共来源；可随时切换full，原配置进度仍保留。'}
-    candidates=[source] if source else list(PROVIDERS)
+    active=s.get('active_source')
+    candidates=[source] if source else ([active] if active in PROVIDERS else [])+[key for key in PROVIDERS if key!=active]
     for key in candidates:
         if key not in PROVIDERS:raise ValueError('未知来源')
         saved=s['progress'].get(key,{})
@@ -64,6 +70,7 @@ def mark(source,step=None,skip=False):
     if source not in PROVIDERS:raise ValueError('未知来源')
     if step not in STEPS+[None,'manual_validation']:raise ValueError('未知步骤')
     s=rt.load_state();p=s['progress'].setdefault(source,{'done':[]});p['skipped']=bool(skip)
+    s['active_source']=None if skip else source
     if step:
         if step=='tested':raise ValueError('请通过 research_verify 执行真实查询，不能用确认动作代替测试')
         if step=='manual_validation':p['completed']=True;p['evidence_kind']='user_or_agent_confirmation'
