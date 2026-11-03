@@ -37,10 +37,19 @@ def _post(s, path, params, config):
     return j
 
 def _require_institution(session,config):
-    identity=_post(session,'client/org/getByIp',{},config).get('body')
-    if not isinstance(identity,dict) or identity.get('name')!='浙江大学':
-        raise RuntimeError('未确认本次会话的浙江大学 IP 机构身份；目录与详情均要求 getByIp 名称精确匹配')
-    return identity
+    from diagnostics import SourceError
+    for attempt in range(2):
+        identity=_post(session,'client/org/getByIp',{},config).get('body')
+        name=identity.get('name') if isinstance(identity,dict) else None
+        empty=identity in (None,'',[],{}) or isinstance(identity,dict) and name in (None,'')
+        if empty and attempt==0:continue
+        if not empty and isinstance(name,str) and name=='浙江大学':return identity
+        reason='empty_identity_response' if empty else ('institution_name_mismatch' if isinstance(name,str) else 'invalid_identity_schema')
+        message='机构认证请求完成但未确认浙江大学身份；'+('连续两次返回空机构信息' if empty else '返回机构名称不匹配或结构异常')
+        error=SourceError('institution_identity_unconfirmed',message,url=API+'client/org/getByIp')
+        error.details.update(reason=reason,attempts=attempt+1,identity_body_type=type(identity).__name__,expected_institution='浙江大学')
+        raise error
+
 
 def search(keyword, page=1, limit=5, session=None):
     if not isinstance(keyword, str) or not 1 <= len(keyword.strip()) <= 100:

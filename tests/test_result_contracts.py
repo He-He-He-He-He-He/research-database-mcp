@@ -113,4 +113,26 @@ class ResultContractChecks(unittest.TestCase):
             result=mcp.call('research_verify',{'source':'eia'})
         self.assertFalse(result['verification_accepted']);self.assertFalse(record.call_args.args[1])
 
+    def test_wenxinge_page_and_gongyuan_description_are_content_but_not_image(self):
+        r=assess('wenxinge-institution-page','text_content',{'page_html':'<div>原文和注文</div>'});self.assertTrue(r['has_content']);self.assertEqual(r['content_level'],'single_page_text')
+        r=assess('gongyuan-institution-detail','text_content',{'detail_text':'图片编号1：说明文字'});self.assertTrue(r['has_content']);self.assertEqual(r['content_level'],'image_description');self.assertFalse(r['image_downloaded'])
+    def test_tianlu_reports_main_text_annotation_and_layout_separately(self):
+        body={'main_text_raw':'正文','annotation_json_raw':'{"pos":[{"from":1,"to":2}]}','layout_json_raw':'{"bbox":[1,2,3,4]}'}
+        r=assess('tianlu-institution-page','text_content',body);self.assertEqual(r['text_characters'],2)
+        self.assertEqual(r['raw_payload_characters'],sum(len(v) for v in body.values()))
+        self.assertEqual(r['content_components']['annotations']['raw_characters'],len(body['annotation_json_raw']))
+        self.assertFalse(r['content_components']['layout']['counted_in_text_characters'])
+    def test_unknown_output_means_unknown_not_proven_no_content(self):
+        for body in [{'paragraphs':['actual text']},{'items':[{'body':'actual text'}]}]:
+            r=assess('not-contracted','unclassified',body);self.assertIsNone(r['has_content']);self.assertIsNone(r['has_data']);self.assertEqual(r['result_status'],'unclassified')
+    def test_compact_keeps_components_and_text_count_scope(self):
+        r={'ok':True,'result':{'main_text_raw':'正文'},**assess('tianlu-institution-page','text_content',{'main_text_raw':'正文','annotation_json_raw':'{}','layout_json_raw':'{}'})}
+        c=result_store.present(r,'compact');self.assertIn('content_components',c);self.assertIn('text_character_scope',c)
+
+    def test_handoff_and_acceptance_name_the_current_release(self):
+        from distribution import VERSION
+        root=cli.ROOT.parent
+        for name in ['AI_HANDOFF.md','ACCEPTANCE.md','VALIDATION.md']:
+            self.assertIn(VERSION,(root/'docs'/name).read_text(encoding='utf-8').splitlines()[0])
+
 if __name__=='__main__':unittest.main()

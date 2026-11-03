@@ -62234,10 +62234,21 @@
       ],
       "classification": "static-code-requirements; live response remains authoritative",
       "credential_environment_hints": [],
-      "result_kind": "unclassified",
-      "result_kind_basis": "unknown; inspect schema before claiming data",
-      "content_level_hint": "unclassified",
-      "content_level_basis": "adapter-output contract; not proof of live availability"
+      "result_kind": "bibliographic",
+      "result_kind_basis": "curated adapter-output contract; not live evidence",
+      "content_level_hint": "bibliographic",
+      "content_level_basis": "adapter-output contract; not proof of live availability",
+      "followup_template": {
+        "command": "wenxinge-institution-page",
+        "args": [
+          "{book_id}",
+          "{title}",
+          "--page",
+          "1"
+        ],
+        "note": "title是目录返回的繁体原题名；阅读器若显示异体字差异，应先核对原站，不自动改名。",
+        "binding": "占位符取自同一条目录记录，保留原始值和完整题名；不得猜号、改写或简繁转换。先help并核验每次详情响应。"
+      }
     },
     {
       "command": "wenxinge-institution-toc",
@@ -62286,9 +62297,9 @@
       ],
       "classification": "static-code-requirements; live response remains authoritative",
       "credential_environment_hints": [],
-      "result_kind": "unclassified",
-      "result_kind_basis": "unknown; inspect schema before claiming data",
-      "content_level_hint": "unclassified",
+      "result_kind": "text_content",
+      "result_kind_basis": "curated adapter-output contract; not live evidence",
+      "content_level_hint": "single_page_text",
       "content_level_basis": "adapter-output contract; not proof of live availability"
     },
     {
@@ -63195,10 +63206,21 @@
       ],
       "classification": "static-code-requirements; live response remains authoritative",
       "credential_environment_hints": [],
-      "result_kind": "unclassified",
-      "result_kind_basis": "unknown; inspect schema before claiming data",
-      "content_level_hint": "unclassified",
-      "content_level_basis": "adapter-output contract; not proof of live availability"
+      "result_kind": "catalog",
+      "result_kind_basis": "curated adapter-output contract; not live evidence",
+      "content_level_hint": "catalog",
+      "content_level_basis": "adapter-output contract; not proof of live availability",
+      "followup_template": {
+        "command": "chant-institution-chapter",
+        "args": [
+          "{book_id}",
+          "{chapter_id}",
+          "{book_title}",
+          "{chapter_title}"
+        ],
+        "note": "只有同一命中链接实际给出书目、章节ID及原题名才能调用。缺章节编号先用chant-institution-toc查目录，不能猜测；零命中不自动转换简繁。",
+        "binding": "占位符取自同一条目录记录，保留原始值和完整题名；不得猜号、改写或简繁转换。先help并核验每次详情响应。"
+      }
     },
     {
       "command": "chant-institution-chapter",
@@ -63221,9 +63243,9 @@
       ],
       "classification": "static-code-requirements; live response remains authoritative",
       "credential_environment_hints": [],
-      "result_kind": "unclassified",
-      "result_kind_basis": "unknown; inspect schema before claiming data",
-      "content_level_hint": "unclassified",
+      "result_kind": "text_content",
+      "result_kind_basis": "curated adapter-output contract; not live evidence",
+      "content_level_hint": "single_chapter_text",
       "content_level_basis": "adapter-output contract; not proof of live availability"
     },
     {
@@ -64412,10 +64434,18 @@
       ],
       "classification": "static-code-requirements; live response remains authoritative",
       "credential_environment_hints": [],
-      "result_kind": "unclassified",
-      "result_kind_basis": "unknown; inspect schema before claiming data",
-      "content_level_hint": "unclassified",
-      "content_level_basis": "adapter-output contract; not proof of live availability"
+      "result_kind": "catalog",
+      "result_kind_basis": "curated adapter-output contract; not live evidence",
+      "content_level_hint": "catalog",
+      "content_level_basis": "adapter-output contract; not proof of live availability",
+      "followup_template": {
+        "command": "gongyuan-institution-detail",
+        "args": [
+          "{id}"
+        ],
+        "note": "只取图片详情文字，不下载图片。",
+        "binding": "占位符取自同一条目录记录，保留原始值和完整题名；不得猜号、改写或简繁转换。先help并核验每次详情响应。"
+      }
     },
     {
       "command": "gongyuan-institution-detail",
@@ -64439,9 +64469,9 @@
       ],
       "classification": "static-code-requirements; live response remains authoritative",
       "credential_environment_hints": [],
-      "result_kind": "unclassified",
-      "result_kind_basis": "unknown; inspect schema before claiming data",
-      "content_level_hint": "unclassified",
+      "result_kind": "text_content",
+      "result_kind_basis": "curated adapter-output contract; not live evidence",
+      "content_level_hint": "image_description",
       "content_level_basis": "adapter-output contract; not proof of live availability"
     },
     {

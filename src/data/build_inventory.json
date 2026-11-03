@@ -6,7 +6,7 @@
   "may_need_public_file": 824,
   "bundled_private_data": false,
   "starter_commands": 42,
-  "release_version": "1.5.0",
+  "release_version": "1.5.1",
   "runtime_location": "outside-distribution",
   "access_command_counts": {
     "general": 3586,

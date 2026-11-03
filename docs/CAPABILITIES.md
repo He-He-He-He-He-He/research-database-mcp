@@ -2,7 +2,7 @@
 
 [返回首页](../README.md) · [验证记录](VALIDATION.md) · [数据源清单](DATA_SOURCES.md)
 
-此页说明 v1.5.0 的抽样证据与边界。代码目录有3,753条命令，但不是3,753个已接通数据库。42条starter是历史起步回归样例；其他公开命令仍可在一般模式尝试。每个入口均有结果类型或明确的 `unclassified`，未知类型不冒充已验证。
+此页说明 v1.5.1 的抽样证据与边界。代码目录有3,753条命令，但不是3,753个已接通数据库。42条starter是历史起步回归样例；其他公开命令仍可在一般模式尝试。每个入口均有结果类型或明确的 `unclassified`，未知类型不冒充已验证。
 
 机器可读的样例在 [verified_capabilities.json](../src/data/verified_capabilities.json)。`research_discover(verified_only=true)` 只显示收录了非空样例的命令；默认仍可发现尚未测试的入口。`sample_verified` 对应具体参数、日期、环境和结果层级，不表示全库权限或现在一定在线。没有证据的入口标为 `not_tested`；仅空结果与已观察失败分别标为 `sample_empty_only`、`sample_failed`。
 
@@ -19,7 +19,7 @@
 | `catalog_verification` | 发行版收录的历史样例证据，与本次实时响应分开 |
 | `content_level_hint` / `followup_template` | 预期输出层级和目录字段绑定规则，是调用提示，不是联网证明 |
 
-`empty_result/no_match` 是当前过滤条件零命中；`no_matching_observations` 是当前条件无观测行；`missing_observations` 是有记录或时期但没有可核验数值。缺失不补零；未声明测量字段返回 `observations_unverified`，不能从“有数字”猜成统计数据。`has_data:null` 表示尚不能判断。
+`empty_result/no_match` 是当前过滤条件零命中；`no_matching_observations` 是当前条件无观测行；`missing_observations` 是有记录或时期但没有可核验数值。缺失不补零；未声明测量字段返回 `observations_unverified`，不能从“有数字”猜成统计数据。`has_data:null` 或 `has_content:null` 表示尚不能判断；即使看见items数组，也不从未知结构推断没有正文。
 
 `research_verify` 只有实际返回了已声明层级的非空记录/内容/数值才写入验证通过；空结果、缺失或未分类不会仅凭ok标为成功。
 
@@ -64,6 +64,10 @@ cbs-observations 03743 --top 2
 
 公开数值与目录复测：`python3 -B tools/capability_check.py --suite all --output <包外报告路径>`。此脚本不读取个人凭据、不抄录正文，按每项预期分别验收。其他公开回归见 `tools/public_check.py`。
 
+正文合同只覆盖经过检查的返回字段；剩余数千入口仍是未验证清单，不能仅按命令名批量赋予正文/数值标签。`content_level_hint=unclassified`不是无内容或已验证能力。后续调用模板也只覆盖已经核对字段关系的流程。
+
+天禄的`text_characters`只计main_text_raw可见文字；`content_components`另列annotations/layout的raw_characters。`raw_payload_characters`另统计三项原始字段的总字符数，不称为正文字数。注记JSON可能包含位置、标点或实体标签，版面可能包含OCR候选和坐标，不能把这类JSON长度称为注文或正文字数。原始字段完整保留，统计没有丢弃它们。公元返回image_description，image_downloaded=false，只有详情文字；文心阁及汉达分别按single_page_text/single_chapter_text计量。
+
 ## 馆藏目录之后：真实记录号与原题名
 
 本机校园网络实测，未改变DIRECT设置；每项只取一篇、一页或少量行。公开证据仅保留调用与结果长度/计数，不附正文、会话或用户凭据。
@@ -72,6 +76,9 @@ cbs-observations 03743 --top 2
 |---|---|---|
 | 人大复印报刊 | 第1阅读器页正文段落 | 原id、title；每页两段，段数不是印刷页或整篇 |
 | 鼎秀 | 第1页原文HTML | guid + **title_traditional**；不做简繁转换，无页面影像 |
+| 文心阁 | 单页原文HTML | book_id + 原繁体title；原站阅读器另有异体差异时须核对，不猜改题名 |
+| 汉达 | 实际链接对应的单章HTML | 书目/章节编号及完整题名都取自同一命中，非整库全文 |
+| 公元 | 图片详情说明文字 | 只描述文字，没有图片下载 |
 | 天禄 | 第1页文字、标注、版面字段 | 原id、title；不含页面图像 |
 | 中国资讯行 | 单篇正文段落 | 原record_id/database/partition；建议加 `--expected-title` 逐字核对 |
 | 民国风云 | 单篇段落 | 命中片段另行标为snippet；正文用原query/result_offset/title，图片仅占位 |
@@ -81,8 +88,8 @@ cbs-observations 03743 --top 2
 
 目录中的 `followup_template` 给出字段绑定方法。**选择同一条记录、保留原始题名；缺编号、身份不符或题名不符时停止该详情，不能猜号或改名以求通过。** 微谱列表序号分离与民国风云HTML高亮去标签均保留原字段及规则，不改变作品题名或化合物化学名称。
 
-华案此次目录和详情均成功，但详情只是元数据，简介字段也可能为空。目录与详情现在调用同一个严格的 `getByIp` 精确机构检查；本次源码未发现两处检查规则不同，先前失败可能是不同会话响应，不能仅凭检索成功沿用身份。汉达仍无可靠的机构/检索验证，不列为正文可用。
+华案在v1.5.0历史样例中目录和详情曾成功，但详情只是元数据，简介字段也可能为空。目录与详情现在调用同一个严格的 `getByIp` 精确机构检查；本次源码未发现两处检查规则不同，先前失败可能是不同会话响应，不能仅凭检索成功沿用身份。汉达在1.5.1修正零结果误判后，已通过“詩經”检索及真实编号的单章验证；简体“诗经”的明确零结果不自动改为繁体。华案本轮目录会话连续返回空身份，另一次详情会话成功且仅有元数据；这两种观察分别保留，不代表当前网络稳定可用。
 
-中华经典、文泉、科学文库、掌阅、思想理论资源、边疆史地、东方杂志、古地图、域外汉籍、文心阁、数字方志、爱教材等现有详情多为书目、简介或目录，不能当作正文。公苑图片说明不等于图片文件。Ovid、FirstSearch、IncoPat、CNRDS现有题录入口不附带对应全文接口。法院公开案例通报和国知局公开调查报告不等于全部裁判文书或专利全文。
+中华经典、文泉、科学文库、掌阅、思想理论资源、边疆史地、东方杂志、古地图、域外汉籍、数字方志、爱教材等现有详情多为书目、简介或目录，不能当作正文。公苑图片说明不等于图片文件。Ovid、FirstSearch、IncoPat、CNRDS现有题录入口不附带对应全文接口。法院公开案例通报和国知局公开调查报告不等于全部裁判文书或专利全文。
 
 当前一页/篇可读，只证明本条在本次会话可读；不推出同一本其他页、整库下载、图片或后续会话权限。导出JSON/CSV保存的是工具已经返回的字段，导出目录不是下载原书。

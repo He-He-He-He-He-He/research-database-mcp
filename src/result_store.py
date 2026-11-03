@@ -80,7 +80,7 @@ def present(result,output='auto',export_format='json'):
     if output=='full' and size<=1500000 and export_format=='json':return result
     exported=save(result,export_format)
     if output=='full' and size<=1500000:return {**result,**exported}
-    out={k:result[k] for k in ('ok','command','partial','source','result_kind','result_status','execution_ok','record_count','has_data','has_records','has_content','content_level','numeric_observation_count','data_verified','empty_reason','catalog_verification','verification_accepted','text_characters','scope_note','warnings','verification','passed','failed','total','data_summary') if k in result}
+    out={k:result[k] for k in ('ok','command','partial','source','result_kind','result_status','execution_ok','record_count','has_data','has_records','has_content','content_level','numeric_observation_count','data_verified','empty_reason','catalog_verification','verification_accepted','text_characters','text_character_scope','content_components','raw_payload_characters','image_downloaded','scope_note','warnings','verification','passed','failed','total','data_summary') if k in result}
     out.update(exported,export_scope='tool_response_only; catalog/snippet export is not a full-text download',inline_complete=False,output='file' if output=='file' else 'compact',notice='这是预览或文件引用。完整JSON保留原始值、来源、口径、分页与失败信息；存储行数不代表源站全部记录。文件在接收者自己的包外状态目录，需自行保管和清理。')
     if output!='file':
         out['preview']=preview(result.get('result',result))

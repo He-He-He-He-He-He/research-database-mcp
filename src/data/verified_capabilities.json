@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "release_version": "1.5.0",
+  "release_version": "1.5.1",
   "notice": "样例级证据；未列出的命令只有代码入口。sample_verified仅验证所列目录/题录/正文单元/数值，非实时状态或全库权限。无维护者凭据、Cookie、正文或下载文件。",
   "commands": {
     "adb-dataflows": {
@@ -347,6 +347,98 @@
         }
       ]
     },
+    "chant-institution-chapter": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-institution-followup",
+          "environment": "macOS; current institution network; sample only",
+          "args": [
+            "cdfdf940-40b4-11e9-b2f3-65894529c26e",
+            "572a6650-416b-11e9-bea6-099b3d962b85",
+            "史記",
+            "儒林列傳第六十一"
+          ],
+          "credential_used": false,
+          "result_kind": "text_content",
+          "ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "content_level": "single_chapter_text",
+          "has_data": true,
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 8087,
+          "sample_id": "dc6579cf2c52"
+        }
+      ],
+      "latest_observation": {
+        "checked_on": "2026-11-03",
+        "run_id": "v1.5.1-institution-followup",
+        "ok": true,
+        "result_status": "content"
+      },
+      "scope_note": "同一返回链接的真实编号及原题名；简体零命中没有自动替换成繁体；仅样例单章，不是全库。"
+    },
+    "chant-ip-search": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-institution-followup",
+          "environment": "macOS; current institution network; sample only",
+          "args": [
+            "诗经",
+            "--limit",
+            "1"
+          ],
+          "credential_used": false,
+          "result_kind": "catalog",
+          "ok": true,
+          "result_status": "empty_result",
+          "record_count": 0,
+          "has_records": false,
+          "has_content": false,
+          "content_level": "catalog",
+          "has_data": false,
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "e0c5cae00596"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-institution-followup",
+          "environment": "macOS; current institution network; sample only",
+          "args": [
+            "詩經",
+            "--limit",
+            "1"
+          ],
+          "credential_used": false,
+          "result_kind": "catalog",
+          "ok": true,
+          "result_status": "catalog",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "content_level": "catalog",
+          "has_data": false,
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "31e274b042b0"
+        }
+      ],
+      "latest_observation": {
+        "checked_on": "2026-11-03",
+        "run_id": "v1.5.1-institution-followup",
+        "ok": true,
+        "result_status": "catalog"
+      },
+      "scope_note": "同一返回链接的真实编号及原题名；简体零命中没有自动替换成繁体；仅样例单章，不是全库。"
+    },
     "crossref": {
       "level": "sample_verified",
       "samples": [
@@ -651,6 +743,70 @@
         }
       ]
     },
+    "gongyuan-institution-detail": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-institution-followup",
+          "environment": "macOS; current institution network; sample only",
+          "args": [
+            "50043340"
+          ],
+          "credential_used": false,
+          "result_kind": "text_content",
+          "ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "content_level": "image_description",
+          "has_data": true,
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 146,
+          "sample_id": "b46cd42dce48"
+        }
+      ],
+      "latest_observation": {
+        "checked_on": "2026-11-03",
+        "run_id": "v1.5.1-institution-followup",
+        "ok": true,
+        "result_status": "content"
+      },
+      "scope_note": "仅图片详情文字，没有下载图片。"
+    },
+    "gongyuan-institution-search": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-institution-followup",
+          "environment": "macOS; current institution network; sample only",
+          "args": [
+            "中国"
+          ],
+          "credential_used": false,
+          "result_kind": "catalog",
+          "ok": true,
+          "result_status": "catalog",
+          "record_count": 12,
+          "has_records": true,
+          "has_content": false,
+          "content_level": "catalog",
+          "has_data": false,
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "ba54e3c2c6b0"
+        }
+      ],
+      "latest_observation": {
+        "checked_on": "2026-11-03",
+        "run_id": "v1.5.1-institution-followup",
+        "ok": true,
+        "result_status": "catalog"
+      }
+    },
     "hbn-institution-indicators": {
       "level": "sample_verified",
       "samples": [
@@ -758,8 +914,36 @@
           "data_verified": false,
           "sample_id": "1a7405374c48",
           "evidence_origin": "local-command-execution"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-institution-followup",
+          "environment": "macOS; current institution network; sample only",
+          "args": [
+            "管理",
+            "--limit",
+            "1"
+          ],
+          "credential_used": false,
+          "result_kind": "catalog",
+          "ok": false,
+          "error": "institution_identity_unconfirmed",
+          "result_status": "error",
+          "has_data": false,
+          "data_verified": false,
+          "reason": "empty_identity_response",
+          "sample_id": "6ae06b4ea240"
         }
-      ]
+      ],
+      "latest_observation": {
+        "checked_on": "2026-11-03",
+        "run_id": "v1.5.1-institution-followup",
+        "ok": false,
+        "error": "institution_identity_unconfirmed",
+        "result_status": "error",
+        "reason": "empty_identity_response"
+      },
+      "scope_note": "早先非空样例仅历史证据；v1.5.1本轮连续两次身份body为空，当前访问未确认。"
     },
     "htcases-institution-detail": {
       "level": "sample_verified",
@@ -785,9 +969,35 @@
           "data_verified": false,
           "sample_id": "618e7b9a8f22",
           "evidence_origin": "local-command-execution"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-detail-retest",
+          "environment": "macOS; current institution network; fresh request",
+          "args": [
+            "627590",
+            "自然资源部等三部门联合印发《关于完善设施农用地管理的通知》"
+          ],
+          "credential_used": false,
+          "result_kind": "metadata",
+          "ok": true,
+          "error": null,
+          "result_status": "metadata",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "metadata",
+          "record_count": null
         }
       ],
-      "scope_note": "本次元数据详情成功，不含全文；检索和详情共用同一精确机构检查，不继承旧会话身份。"
+      "scope_note": "本轮另一会话的详情成功，仅元数据；目录曾连续两次身份body为空。每次请求仍须重新确认，不承诺当前网络稳定可用。",
+      "latest_observation": {
+        "checked_on": "2026-11-03",
+        "run_id": "v1.5.1-detail-retest",
+        "ok": true,
+        "error": null,
+        "result_status": "metadata"
+      }
     },
     "iadb-dataset": {
       "level": "sample_failed",
@@ -1493,6 +1703,50 @@
           "text_characters": 231,
           "sample_id": "44b5a2a8d197",
           "evidence_origin": "local-command-execution"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-contract-reassessment",
+          "evidence_origin": "reassessed earlier saved response; not a new live request",
+          "args": [
+            "0004EFB4D39C396B",
+            "（乾隆）平原縣志10卷",
+            "--page",
+            "1"
+          ],
+          "result_kind": "text_content",
+          "execution_ok": true,
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "content_level": "single_page_text",
+          "has_data": true,
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "result_status": "content",
+          "text_characters": 231,
+          "scope_note": "只验证当前一篇/一页/阅读器片段；短命中片段不等于正文，不代表整本或整库全文、影像及下载权限。",
+          "content_components": {
+            "main_text": {
+              "text_characters": 231,
+              "raw_characters": 231,
+              "counted_in_text_characters": true
+            },
+            "annotations": {
+              "raw_characters": 7148,
+              "format": "json",
+              "has_payload": true,
+              "counted_in_text_characters": false
+            },
+            "layout": {
+              "raw_characters": 34088,
+              "format": "json",
+              "has_payload": true,
+              "counted_in_text_characters": false
+            }
+          },
+          "raw_payload_characters": 41467,
+          "text_character_scope": "main_text_raw可见文字；注记和版面以各自原始字符数另列。JSON标签、标点位置及OCR候选不冒充注文或正文字数。"
         }
       ]
     },
@@ -1641,6 +1895,74 @@
           "evidence_origin": "local-public-regression"
         }
       ]
+    },
+    "wenxinge-institution-catalog": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-institution-followup",
+          "environment": "macOS; current institution network; sample only",
+          "args": [
+            "论语",
+            "--limit",
+            "1"
+          ],
+          "credential_used": false,
+          "result_kind": "bibliographic",
+          "ok": true,
+          "result_status": "bibliographic",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "content_level": "bibliographic",
+          "has_data": false,
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "3c01729adbbf"
+        }
+      ],
+      "latest_observation": {
+        "checked_on": "2026-11-03",
+        "run_id": "v1.5.1-institution-followup",
+        "ok": true,
+        "result_status": "bibliographic"
+      }
+    },
+    "wenxinge-institution-page": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "run_id": "v1.5.1-institution-followup",
+          "environment": "macOS; current institution network; sample only",
+          "args": [
+            "33AC5974B23C4E39A830B061474C80EF",
+            "邇言",
+            "--page",
+            "1"
+          ],
+          "credential_used": false,
+          "result_kind": "text_content",
+          "ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "content_level": "single_page_text",
+          "has_data": true,
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 221,
+          "sample_id": "f9c95ca67003"
+        }
+      ],
+      "latest_observation": {
+        "checked_on": "2026-11-03",
+        "run_id": "v1.5.1-institution-followup",
+        "ok": true,
+        "result_status": "content"
+      }
     },
     "who-air-quality-2026": {
       "level": "sample_verified",
