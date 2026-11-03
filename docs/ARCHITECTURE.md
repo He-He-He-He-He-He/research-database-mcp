@@ -43,7 +43,7 @@ flowchart TD
 | 工具 | 主要字段 |
 |---|---|
 | `research_setup` | `action`：status/next/select/mark/skip/pause/resume；按动作使用 mode/source/step |
-| `research_discover` | keyword，limit 1—40，starter_only |
+| `research_discover` | keyword，limit 1—40，starter_only，可选 kind 返回层级 |
 | `research_help` | command |
 | `research_query` | command，args 字符串数组（最多 40 项，每项最多 4,000 字符） |
 | `research_verify` | source，使用向导内该来源的固定示例查询 |

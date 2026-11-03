@@ -110,3 +110,18 @@ python3 -B doctor.py --command arxiv --args-json '["digital economy","--rows","2
 网络错误现在尽量区分 HTTP、证书、代理、DNS、超时与响应格式；旧适配器可能仍只能提供通用错误。ONS 首个目录页失败会返回失败，部分页失败则带 `partial` 和 `warnings`，不能将失败页解释成没有匹配数据。
 
 诊断中的代理/CA 标记只说明相应环境变量是否设置，不能判断系统代理、TUN 或最终出口。目录检索还受原站语言和大小写规则影响；零结果应核对原站词汇和筛选范围。
+
+错误返回的结构示例（省略非关键字段）：
+
+```json
+{
+  "ok": false,
+  "command": "arxiv",
+  "error": "invalid_arguments",
+  "message": "unrecognized arguments: --rows 2",
+  "usage": "usage: research.py arxiv [-h] [--size SIZE] [--start START] keyword",
+  "supported_options": ["-h", "--help", "--size", "--start"]
+}
+```
+
+若参数取值校验发生在某个旧适配器内部，仍可能返回 `invalid_arguments_or_response`；这表示需要核对具体检查信息，不应直接判断是断网或缺密钥。
