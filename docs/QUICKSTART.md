@@ -99,9 +99,9 @@ Windows 上使用自己的 `python` 或 `py` 命令。不要使用其他操作�
 
 ## 7. 验收第一次查询
 
-AI 应能看到以下五个工具：
+AI 应能看到以下七个工具：
 
-`research_setup`、`research_discover`、`research_help`、`research_query`、`research_verify`。
+`research_setup`、`research_discover`、`research_help`、`research_query`、`research_verify`、`research_batch`、`research_result`。
 
 依次执行：
 

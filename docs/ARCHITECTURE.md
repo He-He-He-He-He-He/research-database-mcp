@@ -48,7 +48,7 @@ flowchart TD
 | `research_query` | command，args 字符串数组（最多 40 项，每项最多 4,000 字符） |
 | `research_verify` | source，使用向导内该来源的固定示例查询 |
 
-`research_query` 通过参数数组启动 Python，不把输入拼成 shell。客户端不需要为几千个命令逐一注册工具，只需使用五个统一入口。
+`research_query` 通过参数数组启动 Python，不把输入拼成 shell。客户端不需要为几千个命令逐一注册工具，新版使用七个统一入口。
 
 `research_discover` 是本地命令索引的关键词匹配，带部分中文别名扩展，不是联网语义检索或完整来源健康检查。建议用“统计”“学术”“世界银行”等主题或具体命令/来源词发现，再查看 help。
 
@@ -133,3 +133,7 @@ python3 -B public_check.py --suite all --output /path/outside/package/validation
 query 先检查权限、做离线语法校验，再查短暂网络等待缓存并实际执行。RESEARCH_MCP_VALIDATE_ONLY 仅供内部语法检查，不查询网络或凭据；参数错误优先于网络等待。实际 DNS/连接/代理/TLS/超时错误由 network_health.py 记录 60 秒；查询返回 skipped，discover 默认过滤同一命令，AI 应继续其他来源。不同命令及 HTTP 拒绝/限流不被泛化禁用；network_reset 清除等待不影响配置进度。少数旧适配器只提供通用错误时不猜测其网络状态。
 
 运行 `python3 -B build_access_catalog.py` 可复建命令静态分类。network_hosts 为代码引用的主机提示，可能包含文档/命名空间，**不作为预探测清单或批量封禁依据**。network-health.json 只存实际失败命令、脱敏类型、可选主机名和重试时间，位于包外。
+
+## v1.4.0查询效率
+
+新增batch_query.py、result_store.py、research_sdk.py；两项新工具沿用原模式与凭据门控。静态目录缓存；结果不缓存为查询答案，auto仅在大结果时导出本次完整返回。导出在包外，按随机编号白名单读取；SDK通过上下文状态目录传给子进程，避免不同客户端串用配置。安装器只在自己虚拟环境注册SDK路径，config-only不动系统Python。详见[批量与导出](PRODUCTIVITY.md)。

@@ -7,10 +7,12 @@ import json
 import os
 import tempfile
 import time
+import threading
 from urllib.parse import urlsplit
 import release_runtime as rt
 
 COOLDOWN = 60
+_LOCK=threading.RLock()
 KINDS = {'network_dns_error','network_connection_error','network_proxy_error',
          'network_tls_error','upstream_timeout'}
 
@@ -39,7 +41,7 @@ def status():
 
 
 def reset():
-    _save({})
+    with _LOCK:_save({})
     return status()
 
 
@@ -57,11 +59,12 @@ def record(entry, result):
     endpoint = details.get('endpoint')
     try: host = urlsplit(endpoint).hostname if endpoint else None
     except ValueError: host = None
-    data = _load()
     info = {'reason':error,'retry_at':int(time.time())+COOLDOWN}
     if host: info['host'] = host
-    data['command:'+entry['command']] = info
-    _save(data)
+    with _LOCK:
+        data = _load()
+        data['command:'+entry['command']] = info
+        _save(data)
     return {**result,'skipped':True,'skip_reason':'network_unavailable',
             'retry_after_seconds':COOLDOWN,
             'hint':'本次网络连接失败，已自动跳过并保留配置；先发现并查询其他来源。60 秒后自动重试，切换网络后可用 research_setup(action="network_reset") 立即清除等待。不会自行切换代理或要求注册。'}

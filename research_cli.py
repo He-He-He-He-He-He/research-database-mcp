@@ -11,9 +11,12 @@ from pathlib import Path
 import release_runtime as rt
 import access_policy as policy
 import network_health
+import time
+from functools import lru_cache
 
 ROOT = Path(__file__).resolve().parent
 
+@lru_cache(maxsize=1)
 def catalog():
     return json.loads((ROOT/'command_catalog.json').read_text(encoding='utf-8'))['commands']
 
@@ -26,7 +29,9 @@ def scrub(text):
     text=re.sub(r'(?i)(Authorization\s*[:=]\s*)(?:Bearer\s+)?[^\s"<>]+',r'\1[REDACTED]',text)
     return text
 
-def query(command,args=None,timeout=90,help_only=False):
+def _query_raw(command,args=None,timeout=90,help_only=False):
+    began=time.monotonic()
+    if type(timeout) not in (int,float) or not 0<timeout<=120:raise ValueError('timeout须大于0且最多120秒')
     args=[] if args is None else args
     if not isinstance(command,str) or not isinstance(args,list) or len(args)>40 or any(not isinstance(a,str) or len(a)>4000 or '\x00' in a for a in args):
         raise ValueError('命令和参数格式无效；args应为字符串数组')
@@ -53,7 +58,7 @@ def query(command,args=None,timeout=90,help_only=False):
         # must never hide a caller's new --rows/--size mistake.
         validenv={**environment,'RESEARCH_MCP_VALIDATE_ONLY':'1'}
         try:
-            validation=subprocess.run([sys.executable,str(ROOT/target),command,*args],cwd=ROOT,env=validenv,capture_output=True,text=True,encoding='utf-8',timeout=15)
+            validation=subprocess.run([sys.executable,str(ROOT/target),command,*args],cwd=ROOT,env=validenv,capture_output=True,text=True,encoding='utf-8',timeout=min(15,timeout))
         except subprocess.TimeoutExpired:
             return {'ok':False,'error':'local_validation_timeout','command':command,'message':'本地参数校验超时，未把它认定为外网不可达。'}
         if validation.returncode==0:
@@ -64,7 +69,7 @@ def query(command,args=None,timeout=90,help_only=False):
             p=validation
     try:
         if help_only or validation.returncode==0:
-            p=subprocess.run([sys.executable,str(ROOT/target),command,*args],cwd=ROOT,env=environment,capture_output=True,text=True,encoding='utf-8',timeout=min(120,max(5,int(timeout))))
+            p=subprocess.run([sys.executable,str(ROOT/target),command,*args],cwd=ROOT,env=environment,capture_output=True,text=True,encoding='utf-8',timeout=max(.1,timeout-(time.monotonic()-began)))
     except subprocess.TimeoutExpired:
         return network_health.record(entry,{'ok':False,'error':'upstream_timeout','message':'上游超时；保留配置进度，可以先用其他来源。','command':command})
     stdout,stderr=scrub(p.stdout),scrub(p.stderr)
@@ -93,7 +98,7 @@ def query(command,args=None,timeout=90,help_only=False):
         hints={'credential_required':'此来源需要接收者自己的账号或 API 凭据；按 research_setup 的指定来源引导配置，不能以机构 IP 替代 API 密钥。先使用其他已可用来源。','invalid_arguments_or_response':'先核对参数取值和返回格式；旧适配器的 ValueError 仍可能来自输入或响应校验，不应直接判为网络或凭据问题。','missing_dependency':'此命令缺少依赖库；按缺失库安装，必要时使用 --extras。','missing_public_resource':'此命令需要公开文件；请根据帮助提供文件。缺文件不代表无数据。','upstream_http_error':'检查具体接口返回的 HTTP 状态、来源访问条件和限流提示。','network_tls_error':'检查运行环境的证书链和 CA 设置；不要关闭证书校验。','network_proxy_error':'检查当前进程的代理配置，不要公开代理凭据。','network_dns_error':'检查运行环境是否能解析具体接口域名。','upstream_timeout':'缩小查询或稍后再试；先保留配置并使用其他来源。'}
         return network_health.record(entry,{'ok':False,'command':command,'error':category,'message':message,'diagnostics':{**details,'environment':environment_summary()},'hint':hints.get(category,'查看具体错误类型和该命令帮助；首页返回200不能证明同一查询可用。')})
     if help_only:return {'ok':True,'command':command,'help':stdout[:30000],'requirements':entry}
-    if len(stdout)>1500000:return {'ok':False,'error':'response_too_large','message':'返回过大，请减少数量、时间范围或分页。'}
+    if len(stdout.encode('utf-8'))>12000000:return {'ok':False,'error':'response_too_large','message':'返回超过12MB处理上限，请缩小时间、数量或分页。'}
     try:value=json.loads(stdout)
     except json.JSONDecodeError:
         return {'ok':False,'command':command,'error':'unexpected_output','message':'没有取得可验证的JSON结果；可能是帮助、页面变化或登录拦截。','preview':stdout[:1500]}
@@ -101,6 +106,9 @@ def query(command,args=None,timeout=90,help_only=False):
     partial=isinstance(value,dict) and bool(value.get('failed_pages'))
     if partial and value.get('pages',value.get('scanned',0))==0:failure=True
     result={'ok':not failure,'command':command,'result':value,'requirements':entry,'source':'research-mcp','partial':partial,'result_kind':entry.get('result_kind','unclassified'),'verification':'真实命令返回；目录、元数据与数值不同，单次成功不代表完整覆盖、机构授权或其他参数通过。'}
+    if command=='wb-series' and isinstance(value,list) and len(value)==2 and isinstance(value[0],dict) and value[0].get('complete') is False:
+        result['partial']=True
+        result.setdefault('warnings',[]).append('世界银行分页尚未完整获取；请检查metadata中的next_page、failed_pages和max-pages，不把已存行数当作全量。')
     if command in ('nbs-annual-series','nbs-frequency-series') and isinstance(value,dict):
         import math
         values=[point.get('value') for period in value.get('data',[]) for point in period.get('values',[])]
@@ -113,6 +121,13 @@ def query(command,args=None,timeout=90,help_only=False):
         result.setdefault('warnings',[]).append('部分请求失败，结果不完整；请查看result.failed_pages。')
         if failure:result['error']='upstream_scan_failed'
     return result
+
+def query(command,args=None,timeout=90,help_only=False,output='auto',export_format='json'):
+    from result_store import present
+    if output not in ('auto','full','compact','file'):raise ValueError('output须为auto/full/compact/file')
+    if export_format not in ('json','csv'):raise ValueError('export_format须为json/csv')
+    result=_query_raw(command,args,timeout,help_only)
+    return result if help_only else present(result,output,export_format)
 
 def main():
     if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')

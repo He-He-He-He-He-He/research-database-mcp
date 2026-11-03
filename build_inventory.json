@@ -6,12 +6,22 @@
   "may_need_public_file": 824,
   "bundled_private_data": false,
   "starter_commands": 42,
-  "release_version": "1.3.0",
+  "release_version": "1.4.0",
   "runtime_location": "outside-distribution",
   "access_command_counts": {
     "general": 3586,
     "zju": 91,
     "login": 76
   },
-  "access_classification": "reachable-command-functions; static, not live availability"
+  "access_classification": "reachable-command-functions; static, not live availability",
+  "mcp_tools": 7,
+  "features": [
+    "native-worldbank-bulk",
+    "bounded-batch",
+    "private-json-csv-exports",
+    "scoped-result-read",
+    "python-sdk",
+    "explicit-client-merge",
+    "https-index-fallback"
+  ]
 }

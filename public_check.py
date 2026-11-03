@@ -6,7 +6,9 @@ from pathlib import Path
 from diagnostics import environment_summary
 import release_runtime as rt
 import onboarding
-from research_cli import query
+from research_cli import query as _query
+
+def query(command,args=None):return _query(command,args,output="full")
 
 QUICK=[('worldbank','wb-series',['FRA','SP.POP.TOTL','--start','2020','--end','2023']),('crossref','crossref',['renewable energy','--rows','1']),('arxiv','arxiv',['digital economy','--size','1']),('pubmed','pubmed-search',['digital economy','--size','1']),('ons','ons-dataset-discover',['population','--max-pages','1','--limit','1']),('cbs','cbs-datasets',['--top','1']),('faostat','faostat-api-domains',['--limit','1']),('bis','bis-dataflows',['exchange']),('usgs','usgs-earthquakes',['2024-01-01','2024-01-02','--limit','1']),('law','law-search',['消费者权益保护法','--size','1']),('nbs-reports','nbs-macro-list',['--page','1']),('spp','spp-reports',[]),('nasa','nasa-power-daily',['0','0','2024-01-01','2024-01-02'])]
 CHINA=[('gdp','国内生产总值','annual','2020','2023'),('cpi','居民消费价格指数','monthly','2024-01','2024-03'),('ppi','工业生产者出厂价格指数','monthly','2024-01','2024-03'),('pmi','制造业采购经理指数','monthly','2024-01','2024-03'),('retail','社会消费品零售总额','monthly','2024-01','2024-03')]
@@ -53,7 +55,7 @@ def china_case(label,keyword,frequency,start,end):
 def main():
     if hasattr(sys.stdout,'reconfigure'):sys.stdout.reconfigure(encoding='utf-8')
     p=argparse.ArgumentParser(description='可选联网抽样：只使用公开来源，不读取实际用户配置或凭据')
-    p.add_argument('--suite',choices=['quick','china','modes','all'],default='quick');p.add_argument('--output',type=Path);p.add_argument('--allow-failures',action='store_true');a=p.parse_args()
+    p.add_argument('--suite',choices=['quick','china','modes','productivity','all'],default='quick');p.add_argument('--output',type=Path);p.add_argument('--allow-failures',action='store_true');a=p.parse_args()
     root=Path(__file__).resolve().parent
     if a.output and a.output.expanduser().resolve().is_relative_to(root):raise SystemExit('诊断输出必须位于发行目录外')
     original=os.environ.get('RESEARCH_MCP_STATE_DIR')
@@ -70,6 +72,26 @@ def main():
                        ('public-extension-nbs-household','household-spending-groups',[])]
                 for label,command,args in cases:
                     began=time.monotonic();out=brief(label,command,query(command,args),time.monotonic()-began);rows.append(out);print(json.dumps(out,ensure_ascii=False),flush=True)
+            if a.suite in ('productivity','all'):
+                began=time.monotonic()
+                r=query('wb-series',['CHN,USA,DEU','NY.GDP.MKTP.KD.ZG,FP.CPI.TOTL.ZG','--start','2020','--end','2023'])
+                body=r.get('result');valid=r.get('ok') and isinstance(body,list) and len(body)==2
+                values=body[1] if valid else []
+                countries={x.get('countryiso3code') for x in values};indicators={x.get('indicator',{}).get('id') for x in values}
+                out={'check':'native-worldbank-bulk','command':'wb-series','ok':bool(valid and countries=={'CHN','USA','DEU'} and indicators=={'NY.GDP.MKTP.KD.ZG','FP.CPI.TOTL.ZG'} and len(values)==24 and body[0].get('complete')),'returned_rows':len(values),'seconds':round(time.monotonic()-began,2)}
+                if not out['ok']:out['error']=r.get('error','unexpected_bulk_shape')
+                rows.append(out);print(json.dumps(out,ensure_ascii=False),flush=True)
+                from batch_query import batch
+                from result_store import read,fetch
+                began=time.monotonic()
+                r=batch([{'command':'crossref','args':['renewable energy','--rows','1']},{'command':'arxiv','args':['renewable energy','--size','1']}],max_workers=2,output='file',export_format='csv')
+                valid=bool(r.get('result_id'))
+                if valid:
+                    stored_result=json.loads(read(r['result_id']));page=fetch(r['result_id'],limit=1)
+                    valid=stored_result.get('passed')==2 and page['next_offset']==1 and len(r['artifacts'])==2
+                out={'check':'batch-json-csv-export','command':'research_batch','ok':bool(valid and r.get('ok')),'seconds':round(time.monotonic()-began,2),'result_files_outside_package':True}
+                if not out['ok']:out['error']='batch_or_export_sample_failed'
+                rows.append(out);print(json.dumps(out,ensure_ascii=False),flush=True)
             if a.suite in ('china','all'):
                 for case in CHINA:
                     out=china_case(*case);rows.append(out);print(json.dumps(out,ensure_ascii=False),flush=True)

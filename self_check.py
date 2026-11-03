@@ -68,7 +68,7 @@ class ReleaseChecks(unittest.TestCase):
     def test_stdio_protocol(self):
         req=[{'jsonrpc':'2.0','id':1,'method':'initialize','params':{}},{'jsonrpc':'2.0','method':'notifications/initialized'},{'jsonrpc':'2.0','id':2,'method':'tools/list'}]
         p=subprocess.run([sys.executable,'-B',str(cli.ROOT/'research_mcp.py')],input=''.join(json.dumps(x)+'\n' for x in req),capture_output=True,text=True,env=rt.subprocess_environment(),check=True)
-        rows=[json.loads(x) for x in p.stdout.splitlines()];self.assertEqual(len(rows),2);self.assertEqual(len(rows[1]['result']['tools']),5)
+        rows=[json.loads(x) for x in p.stdout.splitlines()];self.assertEqual(len(rows),2);self.assertEqual(len(rows[1]['result']['tools']),7)
     def test_engine_help(self):self.assertTrue(cli.query('wb-series',help_only=True)['ok'])
     def test_python_syntax(self):
         for p in cli.ROOT.rglob('*.py'):

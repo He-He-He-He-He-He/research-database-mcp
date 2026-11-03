@@ -55044,8 +55044,8 @@
       "access": "general",
       "result_kind": "observations",
       "example_args": [
-        "FRA",
-        "SP.POP.TOTL",
+        "CHN,USA,DEU",
+        "NY.GDP.MKTP.KD.ZG,FP.CPI.TOTL.ZG",
         "--start",
         "2020",
         "--end",
@@ -55059,7 +55059,15 @@
         "public-regression-fixture"
       ],
       "classification": "static-code-requirements; live response remains authoritative",
-      "credential_environment_hints": []
+      "credential_environment_hints": [],
+      "description": "世界银行原生多国/多指标年度序列；逗号或分号分隔，检查分页、数据源及缺失值。",
+      "topics": [
+        "GDP",
+        "人口",
+        "通胀",
+        "多国",
+        "批量"
+      ]
     },
     {
       "command": "disability-yearbooks",
@@ -67785,7 +67793,8 @@
         "no-required-credential-or-institution-guard-in-reachable-code"
       ],
       "classification": "static-code-requirements; live response remains authoritative",
-      "credential_environment_hints": []
+      "credential_environment_hints": [],
+      "result_kind": "bibliographic"
     },
     {
       "command": "journalism-studies-crossref",
@@ -70829,7 +70838,8 @@
         "no-required-credential-or-institution-guard-in-reachable-code"
       ],
       "classification": "static-code-requirements; live response remains authoritative",
-      "credential_environment_hints": []
+      "credential_environment_hints": [],
+      "result_kind": "bibliographic"
     },
     {
       "command": "epmc-fulltext",
@@ -70909,7 +70919,8 @@
         "no-required-credential-or-institution-guard-in-reachable-code"
       ],
       "classification": "static-code-requirements; live response remains authoritative",
-      "credential_environment_hints": []
+      "credential_environment_hints": [],
+      "result_kind": "bibliographic"
     },
     {
       "command": "datacite",
@@ -70928,7 +70939,8 @@
         "no-required-credential-or-institution-guard-in-reachable-code"
       ],
       "classification": "static-code-requirements; live response remains authoritative",
-      "credential_environment_hints": []
+      "credential_environment_hints": [],
+      "result_kind": "bibliographic"
     },
     {
       "command": "crossref-advanced",

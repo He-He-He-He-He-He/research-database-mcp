@@ -8979,6 +8979,9 @@ def main():
     x.add_argument('code')
     x.add_argument('--start', type=int, required=True)
     x.add_argument('--end', type=int, required=True)
+    x.add_argument('--source', default=None)
+    x.add_argument('--max-pages', type=int, default=4)
+    x.add_argument('--page', type=int, default=1)
     x = sub.add_parser('disability-yearbooks')
     x = sub.add_parser('disability-yearbook-table')
     x.add_argument('url')
@@ -19416,7 +19419,7 @@ def main():
         elif a.cmd == 'wb-indicator':
             data = wb.indicator(a.code)
         else:
-            data = wb.series(a.country, a.code, a.start, a.end)
+            data = wb.series(a.country, a.code, a.start, a.end, a.source, a.max_pages, a.page)
     elif a.cmd in ('disability-yearbooks', 'disability-yearbook-table'):
         import cdpf_yearbook_adapters as cdpf
         data = cdpf.disability_yearbooks() if a.cmd == 'disability-yearbooks' else cdpf.disability_yearbook_table(a.url)

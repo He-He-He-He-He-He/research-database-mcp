@@ -1,10 +1,19 @@
 """Isolated state and credential bridge. No legacy account stores are queried."""
 import getpass, json, os, re, subprocess, sys, tempfile
+from contextlib import contextmanager
+from contextvars import ContextVar
 from pathlib import Path
 from collections.abc import Mapping
 
 _seen_credentials=set()
 _last_transport_error=None
+_state_override=ContextVar('research_state_override',default=None)
+
+@contextmanager
+def using_state(path):
+    token=_state_override.set(Path(path).expanduser().resolve())
+    try:yield
+    finally:_state_override.reset(token)
 
 def transport_error():
     """Actual last curl failure in this process, without a URL query or headers."""
@@ -19,6 +28,7 @@ def subprocess_environment():
     env['PYTHONUTF8']='1'
     env['PYTHONIOENCODING']='utf-8'
     env['NETRC']=str(state_root()/'no-user-netrc')
+    env['RESEARCH_MCP_STATE_DIR']=str(state_root())
     return env
 
 SERVICES={
@@ -29,6 +39,7 @@ SERVICES={
  'research-toolkit-iati-exploratory':'iati','zju-research-un-population-api':'un-population'}
 
 def state_root():
+    if _state_override.get() is not None:return _state_override.get()
     override=os.environ.get('RESEARCH_MCP_STATE_DIR')
     if override:return Path(override).expanduser().resolve()
     base=Path(os.environ.get('APPDATA',str(Path.home()/'.config'))) if sys.platform=='win32' else Path.home()/'.config'

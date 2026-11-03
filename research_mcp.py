@@ -9,6 +9,7 @@ from research_cli import catalog, query
 from distribution import VERSION
 import access_policy as policy
 import network_health
+SESSION_VERSION="2024-11-05"
 
 def tool(name,description,properties,required=()):
     return {'name':name,'description':description,'inputSchema':{'type':'object','properties':properties,'required':list(required),'additionalProperties':False},'annotations':{'readOnlyHint':name not in ('research_setup','research_verify'),'destructiveHint':False,'openWorldHint':True}}
@@ -18,8 +19,10 @@ TOOLS=[
  tool('research_setup','三种模式：general一般（所有无需个人凭据/机构网络的命令）、zju浙大内网（再开放机构IP）、login登录（按需配置个人凭据）。旧partial/full兼容。可暂停恢复；network_status/reset查看或清除实际网络失败后的短暂跳过。不接收密码或密钥。',{'action':{'enum':['status','next','select','mark','skip','pause','resume','network_status','network_reset']},'mode':{'enum':[*policy.MODES,*policy.ALIASES]},'source':STR,'step':STR},['action']),
  tool('research_discover','按当前模式发现可尝试的查询命令；默认过滤模式不允许和近期网络失败命令。available_only=false可查看全部及阻碍原因。starter只是42条起步回归样例，不是一般模式的功能上限。静态分类不代表已验证可用。',{'keyword':STR,'limit':{'type':'integer','minimum':1,'maximum':40},'starter_only':{'type':'boolean'},'available_only':{'type':'boolean'},'kind':{'enum':['observations','catalog','metadata','bibliographic','text_search']}},['keyword']),
  tool('research_help','查看具体命令参数和需求，执行查询前调用。',{'command':STR},['command']),
- tool('research_query','先用research_help确认参数，再用字符串数组执行查询。数量参数可能是--size/--rows/--limit/--top，不能混用。不能传递凭据。',{'command':STR,'args':{'type':'array','items':STR,'maxItems':40}},['command','args']),
+ tool('research_query','参数须为字符串数组，数量参数不可混用。output=auto在大结果时返回摘要和本机完整文件，compact/file显式导出，full请求内联。export_format=csv同时保留完整JSON。不接收凭据。',{'command':STR,'args':{'type':'array','items':STR,'maxItems':40},'output':{'enum':['auto','full','compact','file']},'export_format':{'enum':['json','csv']},'timeout':{'type':'number','minimum':1,'maximum':120}},['command','args']),
  tool('research_verify','真实执行指定来源的示例查询并保存验证结果；不能用帮助页或其他来源替代。一次成功不代表所有数据权限。',{'source':STR},['source']),
+ tool('research_batch','一次提交最多12项独立查询，最多4路并发，同命令族串行。保留每项成功/失败及原顺序，仍遵守模式、凭据和网络跳过。跨国世界银行优先wb-series原生多国/多指标。',{'queries':{'type':'array','minItems':1,'maxItems':12,'items':{'type':'object','properties':{'command':STR,'args':{'type':'array','items':STR,'maxItems':40},'id':STR},'required':['command','args'],'additionalProperties':False}},'max_workers':{'type':'integer','minimum':1,'maximum':4},'output':{'enum':['auto','full','compact','file']},'export_format':{'enum':['json','csv']},'deadline_seconds':{'type':'number','minimum':5,'maximum':120}},['queries']),
+ tool('research_result','按result_id读取自己已导出的完整结果。默认按行分页；pointer为JSON指针，可只取字段。只读本工具生成的结果，不接受任意文件路径。',{'result_id':STR,'pointer':STR,'offset':{'type':'integer','minimum':0},'limit':{'type':'integer','minimum':1,'maximum':200}},['result_id']),
 ]
 
 ALIASES={
@@ -29,7 +32,7 @@ ALIASES={
  '能源':'eia energy iea', '贸易':'wto trade asean', '气候':'climate nasa weather',
  '经济':'wb worldbank bis economic', '农业':'faostat fao agric', '荷兰':'cbs',
  '英国':'ons uk', '美国':'us usa census eia usgs', '中国':'china cn nbs npc',
- '化学':'cas chemistry', '免登录':'starter',
+ '化学':'cas chemistry', '免登录':'public general',
  '宏观':'nbs stats worldbank wb', 'gdp':'nbs 国内生产总值', '国内生产总值':'nbs gdp',
  '社零':'nbs 社会消费品零售总额', '社会消费品':'nbs 零售', 'pmi':'nbs 采购经理指数', 'cpi':'nbs 居民消费价格', 'ppi':'nbs 工业生产者价格',
 }
@@ -41,7 +44,7 @@ def discover(keyword,limit=12,starter_only=False,kind=None,available_only=True):
     for k,v in ALIASES.items():
         if k.casefold() in keyword.casefold():expanded.update(v.casefold().split())
     def score(x):
-        text=' '.join([x['command'],*x.get('modules',[]),x.get('readiness',''),x.get('description',''),*x.get('topics',[])]).casefold()
+        text=' '.join([x['command'],*x.get('modules',[]),x.get('readiness',''),x.get('access',''),x.get('result_kind',''),x.get('description',''),*x.get('topics',[])]).casefold()
         return sum(1 for w in expanded if w in text)+sum(3 for topic in x.get('topics',[]) if topic.casefold() in keyword.casefold())
     state=setup.rt.load_state();mode=state['mode'];rows=[];excluded={'mode':0,'network':0}
     # Load one cache snapshot, rather than reading the state file for each command.
@@ -76,7 +79,13 @@ def call(name,a):
         raise ValueError('未知配置动作')
     if name=='research_discover':return discover(**a)
     if name=='research_help':return query(a['command'],help_only=True)
-    if name=='research_query':return query(a['command'],a['args'])
+    if name=='research_query':return query(**a)
+    if name=='research_batch':
+        from batch_query import batch
+        return batch(**a)
+    if name=='research_result':
+        from result_store import fetch
+        return fetch(**a)
     if name=='research_verify':
         source=a['source']
         if source not in setup.PROVIDERS:raise ValueError('未知来源')
@@ -87,6 +96,7 @@ def call(name,a):
         return result
 
 def handle(m):
+    global SESSION_VERSION
     if not isinstance(m,dict) or m.get('jsonrpc')!='2.0':return None
     ident=m.get('id');method=m.get('method');params=m.get('params') or {}
     if ident is None:return None
@@ -95,12 +105,25 @@ def handle(m):
         if method=='initialize':
             version=params.get('protocolVersion','2024-11-05')
             if version not in ('2024-11-05','2025-03-26','2025-06-18'):version='2024-11-05'
-            result={'protocolVersion':version,'capabilities':{'tools':{'listChanged':False}},'serverInfo':{'name':'research-database-mcp-public','version':VERSION},'instructions':'先research_setup status。general开放无需个人凭据及机构网络的全部命令；zju增加机构IP命令；login按需配置个人账号/API凭据。starter仅是回归样例。网络不可达自动跳过，继续其他来源；不根据国别或是否有代理武断推定。暂停恢复见AI安装指南.md。不接收密码密钥，不把目录当作可用性证明。'}
+            SESSION_VERSION=version
+            result={'protocolVersion':version,'capabilities':{'tools':{'listChanged':False},'resources':{'subscribe':False,'listChanged':False}},'serverInfo':{'name':'research-database-mcp-public','version':VERSION},'instructions':'先research_setup status。general开放无需个人凭据及机构网络的全部命令；zju增加机构IP命令；login按需配置个人账号/API凭据。starter仅是回归样例。网络不可达自动跳过，继续其他来源；不根据国别或是否有代理武断推定。暂停恢复见AI安装指南.md。不接收密码密钥，不把目录当作可用性证明。'}
         elif method=='ping':result={}
         elif method=='tools/list':result={'tools':TOOLS}
         elif method=='tools/call':
             value=call(params.get('name'),params.get('arguments',{}))
             result={'content':[{'type':'text','text':json.dumps(value,ensure_ascii=False)}],'isError':isinstance(value,dict) and value.get('ok') is False}
+            if isinstance(value,dict) and SESSION_VERSION>='2025-06-18':
+                result['structuredContent']=value
+                for artifact in value.get('artifacts',[]):
+                    result['content'].append({'type':'resource_link','uri':artifact['uri'],'name':'完整结果.'+artifact['format'],'mimeType':'application/json' if artifact['format']=='json' else 'text/csv'})
+        elif method=='resources/list':result={'resources':[]}
+        elif method=='resources/read':
+            from result_store import read
+            match=re.fullmatch(r'research://result/([0-9a-f]{32})/(json|csv)',params.get('uri',''))
+            if not match:raise ValueError('仅支持本工具结果资源')
+            text=read(*match.groups())
+            if len(text)>1000000:raise ValueError('资源超过内联预算，请用research_result分页或读取本机导出文件')
+            result={'contents':[{'uri':params['uri'],'mimeType':'application/json' if match[2]=='json' else 'text/csv','text':text}]}
         else:return {'jsonrpc':'2.0','id':ident,'error':{'code':-32601,'message':'Method not found'}}
         return {'jsonrpc':'2.0','id':ident,'result':result}
     except Exception as exc:
