@@ -33,6 +33,6 @@ def verify(root,strict=True):
         p=root/name
         if p.is_symlink() or not p.is_file() or not p.resolve().is_relative_to(root):errors.append('missing_or_unsafe:'+name)
         elif hashlib.sha256(p.read_bytes()).hexdigest()!=digest:errors.append('changed:'+name)
-    extra=[str(p.relative_to(root)) for p in root.rglob('*') if (p.is_file() or p.is_symlink()) and str(p.relative_to(root)) not in files and str(p.relative_to(root))!='MANIFEST.sha256']
+    extra=[p.relative_to(root).as_posix() for p in root.rglob('*') if (p.is_file() or p.is_symlink()) and p.relative_to(root).as_posix() not in files and p.relative_to(root).as_posix()!='MANIFEST.sha256']
     if strict and extra:errors.append('unlisted_runtime_or_other_files:'+str(len(extra)))
     return {'ok':not errors,'files':len(files),'extra_files':len(extra),'errors':errors},files

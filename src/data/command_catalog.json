@@ -74817,8 +74817,8 @@
       ],
       "classification": "static-code-requirements; live response remains authoritative",
       "credential_environment_hints": [],
-      "result_kind": "unclassified",
-      "result_kind_basis": "unknown; inspect schema before claiming data",
+      "result_kind": "text_search",
+      "result_kind_basis": "curated adapter-output contract; not live evidence",
       "content_level_hint": "snippet",
       "content_level_basis": "adapter-output contract; not proof of live availability",
       "followup_template": {

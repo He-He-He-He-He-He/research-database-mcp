@@ -55,7 +55,7 @@ def enrich(entry):
     """Curated expectations, never a replacement for actual sample evidence."""
     command=entry['command'];kind=entry.setdefault('result_kind','unclassified')
     level=TEXT_FIELDS.get(command, (None,))[0]
-    if command in TEXT_FIELDS and level!='snippet':entry['result_kind']='text_content'
+    if command in TEXT_FIELDS:entry['result_kind']='text_search' if level=='snippet' else 'text_content'
     if command=='nmrdata-institution-spectrum':level='spectrum_table';entry['result_kind']='spectrum_table'
     if command=='hbn-institution-values':entry['result_kind']='observations';level='observations'
     if command in {'drcnet-ip-search','hbn-institution-indicators','htcases-institution-catalog'}:entry['result_kind']='catalog'

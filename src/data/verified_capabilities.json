@@ -1065,7 +1065,7 @@
             "--limit",
             "1"
           ],
-          "result_kind": "unclassified",
+          "result_kind": "text_search",
           "credential_used": false,
           "ok": true,
           "execution_ok": true,
