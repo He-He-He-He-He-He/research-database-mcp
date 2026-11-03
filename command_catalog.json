@@ -1420,9 +1420,9 @@
       "modules": [
         "legal_adapters"
       ],
-      "credential": true,
-      "institution": true,
-      "may_need_public_file": true,
+      "credential": false,
+      "institution": false,
+      "may_need_public_file": false,
       "starter": true,
       "readiness": "starter-public"
     },

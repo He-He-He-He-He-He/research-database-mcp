@@ -2,14 +2,17 @@
 import hashlib
 from pathlib import Path, PurePosixPath
 
-VERSION = '1.1.0'
+VERSION = '1.1.1'
 ARCHIVE_ROOT = '研究数据库MCP_发布整理版'
 BLOCKED_PARTS = {'.venv','venv','__pycache__','pycache','__MACOSX','.git','.cache'}
-ROOT_FILES = {'README.md','00_发给自己的AI.md','AGENTS.md','AI安装指南.md','功能边界与隐私.md','验收说明.md','.gitignore','distribution.py','install.py','pack_release.py','verify_manifest.py','release_runtime.py','research_cli.py','research_mcp.py','onboarding.py','cas_bridge.py','self_check.py','test_distribution.py','requirements.txt','requirements-optional.txt','command_catalog.json','build_inventory.json','starter_examples.json'}
+ROOT_FILES = {'CHANGELOG.md','README.md','00_发给自己的AI.md','AGENTS.md','AI安装指南.md','功能边界与隐私.md','验收说明.md','.gitignore','distribution.py','install.py','pack_release.py','verify_manifest.py','release_runtime.py','research_cli.py','research_mcp.py','onboarding.py','cas_bridge.py','self_check.py','test_distribution.py','requirements.txt','requirements-optional.txt','command_catalog.json','build_inventory.json','starter_examples.json'}
+
+DOC_FILES = {'docs/QUICKSTART.md','docs/EXAMPLES.md','docs/DATA_SOURCES.md','docs/CONFIGURATION.md','docs/TROUBLESHOOTING.md','docs/ARCHITECTURE.md'}
 
 def permitted(name):
     p=PurePosixPath(name)
     if p.is_absolute() or '..' in p.parts or any(x in BLOCKED_PARTS for x in p.parts) or '\\' in name:return False
+    if name in DOC_FILES:return True
     if len(p.parts)==1:return name in ROOT_FILES
     return p.parts[0]=='engine' and p.suffix in ('.py','.mjs')
 

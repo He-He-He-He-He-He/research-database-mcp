@@ -79,7 +79,7 @@ def handle(m):
         if method=='initialize':
             version=params.get('protocolVersion','2024-11-05')
             if version not in ('2024-11-05','2025-03-26','2025-06-18'):version='2024-11-05'
-            result={'protocolVersion':version,'capabilities':{'tools':{'listChanged':False}},'serverInfo':{'name':'research-database-mcp-public','version':'1.1.0'},'instructions':'首次调用research_setup status/next，询问partial免登录或full可选配置。完整安装与暂停恢复见AI安装指南.md。不接收密码密钥，不把目录当作可用性证明。'}
+            result={'protocolVersion':version,'capabilities':{'tools':{'listChanged':False}},'serverInfo':{'name':'research-database-mcp-public','version':'1.1.1'},'instructions':'首次调用research_setup status/next，询问partial免登录或full可选配置。完整安装与暂停恢复见AI安装指南.md。不接收密码密钥，不把目录当作可用性证明。'}
         elif method=='ping':result={}
         elif method=='tools/list':result={'tools':TOOLS}
         elif method=='tools/call':

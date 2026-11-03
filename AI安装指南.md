@@ -1,5 +1,7 @@
 # 给接收者 AI 的安装指南
 
+项目用途和能力分层见 [README](README.md)；分步教程见 [快速开始](docs/QUICKSTART.md)，参数示例见 [使用示例](docs/EXAMPLES.md)。
+
 ## 1. 最短安装流程
 
 这是 Python stdio MCP，提供五个工具：`research_setup`、`research_discover`、`research_help`、`research_query`、`research_verify`。要求 Python 3.10+、curl、网络，以及支持 stdio 子进程的 AI 客户端或云端代理环境。
