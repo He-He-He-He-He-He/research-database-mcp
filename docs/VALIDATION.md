@@ -2,13 +2,32 @@
 
 [返回首页](../README.md) · [分发说明](DISTRIBUTION.md) · [实测能力](CAPABILITIES.md)
 
-本版进行发布前检查，不以版本号推断全库可用。新增诊断隐私白名单及coverage计数回归，与原有检查合计134项；三系统及Linux本版联网结果将在发布验证后记录。
+本版进行发布前检查，不以版本号推断全库可用。新增诊断隐私白名单及coverage计数回归，与原有检查合计134项；三系统及Linux本版联网结果见下表。
 
 静态审查覆盖发行清单中的所有文件，未检出维护者个人信息、硬编码API密钥、有效会话字面量或关闭TLS验证的代码。两个类似sid的命中均为已标明的脱敏测试夹具；不作为真实会话。该扫描与代码审查有明确范围，不宣称不存在任何潜在软件问题。
 
 安装/升级检查使用包外临时环境，检查源码不变、七工具、真实免登录查询、批量和导出、SDK、客户端字段保留、模式和暂停恢复；不读取维护者的数据库凭据，也不修改正在使用的客户端配置。Windows/Linux/macOS离线检查与公开网络抽样分开记录。
 
 源码和ZIP将从GitHub独立回下载并逐文件核对清单，另检查匿名下载及桌面副本。查询结果、虚拟环境、账号、会话与配置进度均不随包分发。
+
+
+
+## 本版发布验证结果
+
+| 检查 | 结果 |
+|---|---|
+| Windows / Linux / macOS，Python 3.11 | 各134项离线检查通过 |
+| Linux公开回归 | 21/24达到条件 |
+| Linux分层能力抽样 | 15/16符合各自预期；其中零命中样例单独验收 |
+| 本机全新安装 | 中文/空格路径、七工具、真实批量查询、完整JSON/CSV、资源及分页、SDK跨目录、客户端保留、暂停恢复通过 |
+| v1.5.1升级 | 模式、暂停步骤、当前来源和既有导出结果保留；新服务路径生效 |
+
+[本版CI运行记录](https://github.com/He-He-He-He-He-He/research-database-mcp/actions/runs/41649198516)。Linux公开回归未达标：spp: upstream_or_configuration_error；cpi: no_expected_name_prefix；ppi: no_numeric_observations。允许失败的联网作业用于保存证据，绿色作业不代表全部来源可用。完整分层抽样报告保存在该作业附件与notice中。
+
+此前本机依赖下载曾遇证书校验失败；本版新安装测试给测试进程指定已安装certifi的CA文件后成功，没有关闭TLS验证或修改全局软件源。云端回归使用其各自正常环境。
+
+
+Linux分层能力抽样未达标：iarc-estimates: upstream_or_configuration_error。
 
 以下为历史记录，不代替本版测试。
 
@@ -42,6 +61,25 @@
 
 此前本机依赖下载曾遇证书校验失败；本版新安装测试给测试进程指定已安装certifi的CA文件后成功，没有关闭TLS验证或修改全局软件源。云端回归使用其各自正常环境。
 
+
+
+
+## 本版发布验证结果
+
+| 检查 | 结果 |
+|---|---|
+| Windows / Linux / macOS，Python 3.11 | 各134项离线检查通过 |
+| Linux公开回归 | 21/24达到条件 |
+| Linux分层能力抽样 | 15/16符合各自预期；其中零命中样例单独验收 |
+| 本机全新安装 | 中文/空格路径、七工具、真实批量查询、完整JSON/CSV、资源及分页、SDK跨目录、客户端保留、暂停恢复通过 |
+| v1.5.1升级 | 模式、暂停步骤、当前来源和既有导出结果保留；新服务路径生效 |
+
+[本版CI运行记录](https://github.com/He-He-He-He-He-He/research-database-mcp/actions/runs/41649198516)。Linux公开回归未达标：spp: upstream_or_configuration_error；cpi: no_expected_name_prefix；ppi: no_numeric_observations。允许失败的联网作业用于保存证据，绿色作业不代表全部来源可用。完整分层抽样报告保存在该作业附件与notice中。
+
+此前本机依赖下载曾遇证书校验失败；本版新安装测试给测试进程指定已安装certifi的CA文件后成功，没有关闭TLS验证或修改全局软件源。云端回归使用其各自正常环境。
+
+
+Linux分层能力抽样未达标：iarc-estimates: upstream_or_configuration_error。
 
 以下为历史记录，不代替本版测试。
 
@@ -92,6 +130,25 @@
 
 此前本机依赖下载曾遇证书校验失败；本版新安装测试给测试进程指定已安装certifi的CA文件后成功，没有关闭TLS验证或修改全局软件源。云端回归使用其各自正常环境。
 
+
+
+
+## 本版发布验证结果
+
+| 检查 | 结果 |
+|---|---|
+| Windows / Linux / macOS，Python 3.11 | 各134项离线检查通过 |
+| Linux公开回归 | 21/24达到条件 |
+| Linux分层能力抽样 | 15/16符合各自预期；其中零命中样例单独验收 |
+| 本机全新安装 | 中文/空格路径、七工具、真实批量查询、完整JSON/CSV、资源及分页、SDK跨目录、客户端保留、暂停恢复通过 |
+| v1.5.1升级 | 模式、暂停步骤、当前来源和既有导出结果保留；新服务路径生效 |
+
+[本版CI运行记录](https://github.com/He-He-He-He-He-He/research-database-mcp/actions/runs/41649198516)。Linux公开回归未达标：spp: upstream_or_configuration_error；cpi: no_expected_name_prefix；ppi: no_numeric_observations。允许失败的联网作业用于保存证据，绿色作业不代表全部来源可用。完整分层抽样报告保存在该作业附件与notice中。
+
+此前本机依赖下载曾遇证书校验失败；本版新安装测试给测试进程指定已安装certifi的CA文件后成功，没有关闭TLS验证或修改全局软件源。云端回归使用其各自正常环境。
+
+
+Linux分层能力抽样未达标：iarc-estimates: upstream_or_configuration_error。
 
 以下为历史记录，不代替本版测试。
 
