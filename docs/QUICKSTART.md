@@ -31,7 +31,7 @@ macOS 为主要验证平台。Windows/Linux 按标准 Python 与 curl 环境设�
 可对解压文件夹进行严格检查：
 
 ```sh
-python3 -B verify_manifest.py
+python3 -B tools/verify_manifest.py
 ```
 
 成功时 `ok` 为 `true`、`extra_files` 为 `0`。如果直接克隆仓库，`.git` 会使严格发行检查报告额外文件；安装器和打包器仍只读取许可清单文件。
@@ -123,7 +123,7 @@ AI 应能看到以下七个工具：
 - 只需公开查询：留在 general，查看 [使用示例](EXAMPLES.md)。
 - 想配置其他 API 或机构访问：查看 [配置与暂停恢复](CONFIGURATION.md)。
 - 遇到问题：查看 [常见问题](TROUBLESHOOTING.md)。
-- 想更新或再次分享：重新运行新版安装器会创建新的版本代码副本，同一安装根目录的进度不被清空；分享使用原始发行文件或 `pack_release.py`，不转发运行目录。
+- 想更新或再次分享：重新运行新版安装器会创建新的版本代码副本，同一安装根目录的进度不被清空；分享使用原始发行文件或 `tools/pack_release.py`，不转发运行目录。
 
 旧版升级前可先用 `research_setup(status)` 确认原来的 `state_location`。若旧版使用了与新安装根目录不同的进度目录，应在新安装进程中显式设置相同的 `RESEARCH_MCP_STATE_DIR`，并保留生成连接配置中的该值。这样只切换代码路径，不必复制账号或把本机进度混进发行包。
 

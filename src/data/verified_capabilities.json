@@ -1,0 +1,1797 @@
+{
+  "schema": 1,
+  "release_version": "1.5.0",
+  "notice": "样例级证据；未列出的命令只有代码入口。sample_verified仅验证所列目录/题录/正文单元/数值，非实时状态或全库权限。无维护者凭据、Cookie、正文或下载文件。",
+  "commands": {
+    "adb-dataflows": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "catalog",
+          "record_count": 66,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "fc6d5c720679",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "adb-economies": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "China"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "catalog",
+          "record_count": 3,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "ad66e0a8d1ce",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "adb-indicators": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "DF_PPSI_POP",
+            "--keyword",
+            "population"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "catalog",
+          "record_count": 7,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "57574d6181a1",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "adb-series": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "DF_PPSI_POP",
+            "LP_PE_NUM_MOP",
+            "PRC",
+            "2022",
+            "2023"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 2,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 2,
+          "data_verified": true,
+          "sample_id": "aa4ba894b51a",
+          "evidence_origin": "local-public-regression"
+        }
+      ],
+      "scope_note": "保留UNIT与UNIT_MULT，未自动换算；需核对来源定义及元数据差异。"
+    },
+    "arxiv": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "digital economy",
+            "--size",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "bibliographic",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "4d522829ce35",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "bis-dataflows": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "exchange"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "catalog",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "cfcada46bf19",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "cbs-codes": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "03743",
+            "--dimension",
+            "Measure",
+            "--top",
+            "1"
+          ],
+          "result_kind": "metadata",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "metadata",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "metadata",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "82be806835e0",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "cbs-datasets": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "--query",
+            "population",
+            "--top",
+            "2"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "empty_result",
+          "record_count": 0,
+          "has_records": false,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "empty_reason": "no_match",
+          "sample_id": "6f7a15b4a384",
+          "evidence_origin": "local-public-regression"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "--query",
+            "Bevolking",
+            "--top",
+            "2"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "catalog",
+          "record_count": 2,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "49f136728936",
+          "evidence_origin": "local-public-regression"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "--top",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "catalog",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "57d9667ad312",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "cbs-dimensions": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "03743"
+          ],
+          "result_kind": "metadata",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "metadata",
+          "record_count": 4,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "metadata",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "5e46d08158fa",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "cbs-observations": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "03743",
+            "--top",
+            "2"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 2,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 2,
+          "data_verified": true,
+          "sample_id": "f0eb0fe82c04",
+          "evidence_origin": "local-public-regression"
+        }
+      ],
+      "scope_note": "样例03743为历史且已停止更新的数据集；非最新人口序列。必须查Properties、维度和单位。"
+    },
+    "cbs-properties": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "03743"
+          ],
+          "result_kind": "metadata",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "metadata",
+          "record_count": null,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "metadata",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "75d6c65a5c4e",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "crossref": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "renewable energy",
+            "--rows",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "bibliographic",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "3d8e3d8fc3f8",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "datacite": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "renewable energy",
+            "--size",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "bibliographic",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "dc5f36d7d414",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "dingxiu-institution-catalog": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "論語",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "bibliographic",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "0fb480f75def",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "dingxiu-institution-page": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "2BB1D2F85C844DFFA8FEBA5C6EFDB92E",
+            "論語",
+            "--page",
+            "1"
+          ],
+          "result_kind": "text_content",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "single_page_text",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 394,
+          "sample_id": "f3accba0da1e",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "drcnet-institution-article": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "8389402",
+            "3406",
+            "2167",
+            "广西壮族自治区防城港市东兴市2025年国民经济和社会发展统计公报"
+          ],
+          "result_kind": "text_content",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "article_text",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 212,
+          "sample_id": "48fa4b6abba4",
+          "evidence_origin": "local-command-execution"
+        }
+      ],
+      "scope_note": "单篇提取文字；图片与表格结构不保留。"
+    },
+    "drcnet-ip-search": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "经济",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "catalog",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "c5701424a307",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "drcnet-search-article": {
+      "level": "sample_failed",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "经济",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "text_content",
+          "credential_used": false,
+          "ok": false,
+          "execution_ok": false,
+          "result_status": "error",
+          "has_data": false,
+          "data_verified": false,
+          "error": "network_tls_error",
+          "sample_id": "e44067913508",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "epmc": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "renewable energy",
+            "--size",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "bibliographic",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "15522bf973ea",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "eurostat": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "demo_pjan",
+            "DE",
+            "2023",
+            "--filter",
+            "sex=T",
+            "--filter",
+            "age=TOTAL"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 1,
+          "data_verified": true,
+          "sample_id": "26d98e356554",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "faostat-api-domains": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "--limit",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "catalog",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "008b3e70acb3",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "fda-drug-labels": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "ibuprofen",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "text_search",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "text_search",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "search_results",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "7c31862a6be6",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "hbn-institution-indicators": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "GDP",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "catalog",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "40c7a6b7d1c5",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "hbn-institution-values": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "hqcjsjk",
+            "501202605",
+            "2022-01-01",
+            "2023-12-31",
+            "--page-size",
+            "2"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 2,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 2,
+          "data_verified": true,
+          "sample_id": "73882064dd9a",
+          "evidence_origin": "local-command-execution"
+        }
+      ],
+      "scope_note": "只测试2022—2023历史行；来源含衍生计算，不据此认定全部年份为实绩。"
+    },
+    "household-spending-groups": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "unclassified",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "unclassified",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "c40b8917d48d",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "htcases-institution-catalog": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "管理",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "catalog",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "1a7405374c48",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "htcases-institution-detail": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "627590",
+            "自然资源部等三部门联合印发《关于完善设施农用地管理的通知》"
+          ],
+          "result_kind": "metadata",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "metadata",
+          "record_count": null,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "metadata",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "618e7b9a8f22",
+          "evidence_origin": "local-command-execution"
+        }
+      ],
+      "scope_note": "本次元数据详情成功，不含全文；检索和详情共用同一精确机构检查，不继承旧会话身份。"
+    },
+    "iadb-dataset": {
+      "level": "sample_failed",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "a1d9d74e-1fd9-4b66-89a8-0438f1426d68"
+          ],
+          "result_kind": "metadata",
+          "credential_used": false,
+          "ok": false,
+          "error": "upstream_or_configuration_error",
+          "sample_id": "79b06d3d6d4b",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "iadb-search": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "population",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "catalog",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "5b7444c15e71",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "iarc-globocan-rates": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "818",
+            "--year",
+            "2022"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 3,
+          "data_verified": true,
+          "sample_id": "6a73b22f608e",
+          "evidence_origin": "local-public-regression"
+        }
+      ],
+      "scope_note": "GLOBOCAN 2022估计值，不是癌症登记病例实测数；CI5plus登记命令未在此证明。"
+    },
+    "idb-social-data": {
+      "level": "sample_empty_only",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "BRA",
+            "pop",
+            "2023",
+            "--limit",
+            "2"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "empty_result",
+          "record_count": 0,
+          "has_records": false,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "observations",
+          "numeric_observation_count": 0,
+          "data_verified": false,
+          "empty_reason": "no_matching_observations",
+          "sample_id": "4836a7d042a5",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "idb-social-indicator": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "pop"
+          ],
+          "result_kind": "metadata",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "metadata",
+          "record_count": null,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "metadata",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "9492e5aaf0b0",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "infobank-institution-article": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "1450267",
+            "KX",
+            "KX",
+            "--expected-title",
+            "王文涛会见欧洲议会国际贸易委员会主席朗格"
+          ],
+          "result_kind": "text_content",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "article_text",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 603,
+          "sample_id": "082ad898a772",
+          "evidence_origin": "local-command-execution"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "1450267",
+            "KX",
+            "KX"
+          ],
+          "result_kind": "text_content",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "article_text",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 603,
+          "sample_id": "2d7638221c59",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "infobank-search": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "经济"
+          ],
+          "result_kind": "text_search",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "text_search",
+          "record_count": 25,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "search_results",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "009a0985c207",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "journalism-crossref": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "digital",
+            "--page-size",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "bibliographic",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "12e9bb499524",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "law-search": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "消费者权益保护法",
+            "--size",
+            "1"
+          ],
+          "result_kind": "text_search",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "text_search",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "search_results",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "9043301dbf66",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "minguofy-institution-content-hits": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "中国",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "unclassified",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "snippet",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "snippet",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 42,
+          "sample_id": "5b4e805af3d1",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "minguofy-institution-document": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "中国",
+            "0",
+            "张人骏等陈报弹压徐海饥民焚抢面粉公司酌拟善后办法折"
+          ],
+          "result_kind": "text_content",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "article_text",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 1307,
+          "sample_id": "50d6a9d6e23b",
+          "evidence_origin": "local-command-execution"
+        }
+      ],
+      "scope_note": "单篇段落及图片占位，不含图片文件。"
+    },
+    "nasa-power-daily": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "0",
+            "0",
+            "2024-01-01",
+            "2024-01-02"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": false,
+          "result_status": "missing_observations",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "observations",
+          "numeric_observation_count": 0,
+          "data_verified": false,
+          "error": "numeric_observations_not_verified",
+          "sample_id": "8e6d4e27e8df",
+          "evidence_origin": "local-public-regression"
+        }
+      ],
+      "scope_note": "格点卫星/模型估计，不是当地气象站实测。"
+    },
+    "nbs-frequency-series": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "f7fd25aaad184414875632cf2327da60",
+            "7dc6a2ee6c614960b7059991e0cc4d96",
+            "884c062607104a91967b22742537f44f",
+            "annual",
+            "2020",
+            "2023",
+            "--region-code",
+            "000000000000",
+            "--region-name",
+            "全国"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "observations",
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 4,
+          "data_verified": true,
+          "sample_id": "38f2ffc5f048",
+          "evidence_origin": "local-public-regression"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "8c707b6da5df4703abd7278835e8e668",
+            "962228822a9c4001bea4f3254d442dca",
+            "fc982599aa684be7969d7b90b1bd0e84",
+            "monthly",
+            "2024-01",
+            "2024-03",
+            "--region-code",
+            "000000000000",
+            "--region-name",
+            "全国"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": false,
+          "result_status": "missing_observations",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "observations",
+          "numeric_observation_count": 0,
+          "data_verified": false,
+          "error": "no_numeric_observations",
+          "sample_id": "eaf9e40b0bf4",
+          "evidence_origin": "local-public-regression"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "93ffbb1aa85740d3aa2618371508b606",
+            "a09aa989bdcf4cffa2021795722eb916",
+            "fc982599aa684be7969d7b90b1bd0e84",
+            "monthly",
+            "2024-01",
+            "2024-03",
+            "--region-code",
+            "000000000000",
+            "--region-name",
+            "全国"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "observations",
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 3,
+          "data_verified": true,
+          "sample_id": "8e958481fa8b",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "nbs-macro-list": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "--page",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "catalog",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "3dcb24fc0439",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "nmrdata-institution-catalog": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "ethanol",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "bibliographic",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "715e30ad1eba",
+          "evidence_origin": "local-command-execution"
+        },
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "乙醇",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": false,
+          "execution_ok": false,
+          "result_status": "error",
+          "has_data": false,
+          "data_verified": false,
+          "error": "upstream_or_configuration_error",
+          "sample_id": "c2d5a560f20e",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "nmrdata-institution-spectrum": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "6EDFBDFB-EE3F-42B5-B1DF-5CF5FD4A660B",
+            "1 . ethanol"
+          ],
+          "result_kind": "spectrum_table",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "content",
+          "record_count": 2,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "spectrum_table",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "ac3fb1db3cbd",
+          "evidence_origin": "local-command-execution"
+        }
+      ],
+      "scope_note": "单记录13C NMR原表，不是谱图或化合物身份鉴定；未推定单位。"
+    },
+    "ons-dataset-discover": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "population",
+            "--max-pages",
+            "1",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "catalog",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "af71ff7a6ea9",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "pubmed-search": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "digital economy",
+            "--size",
+            "1"
+          ],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "catalog",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "f1eb901cbfbd",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "rdfybk-institution-catalog": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "经济",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "bibliographic",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "f07846d2251d",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "rdfybk-institution-content": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "928815",
+            "加快建构中国自主的经济学知识体系：2025年中国经济学研究热点分析",
+            "--page",
+            "1"
+          ],
+          "result_kind": "text_content",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "reader_segments",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 2558,
+          "sample_id": "03f7845c4015",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "spp-reports": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [],
+          "result_kind": "catalog",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "catalog",
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "catalog",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "ed126f0797ec",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "tianlu-institution-page": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "0004EFB4D39C396B",
+            "（乾隆）平原縣志10卷",
+            "--page",
+            "1"
+          ],
+          "result_kind": "text_content",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "content",
+          "record_count": null,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "single_page_text",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "text_characters": 231,
+          "sample_id": "44b5a2a8d197",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "tianlu-ip-catalog": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "論語",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "bibliographic",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "bibliographic",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "bibliographic",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "f3b5dc399b42",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "us-census-popest-2024": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "United States",
+            "--year",
+            "2024",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 1,
+          "data_verified": true,
+          "sample_id": "6dd533d33044",
+          "evidence_origin": "local-public-regression"
+        }
+      ],
+      "scope_note": "2024 vintage人口估计，不宣称最新版本或所有美国普查接口。"
+    },
+    "us-treasury-debt": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "--start",
+            "2024-01-02",
+            "--end",
+            "2024-01-03",
+            "--page-size",
+            "2"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 2,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 2,
+          "data_verified": true,
+          "sample_id": "791e58cddd6f",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "usgs-earthquakes": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "2024-01-01",
+            "2024-01-02",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "observations",
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 1,
+          "data_verified": true,
+          "sample_id": "55816ec227cc",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "wb-series": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "FRA",
+            "SP.POP.TOTL",
+            "--start",
+            "2020",
+            "--end",
+            "2023"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "result_status": "observations",
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 4,
+          "data_verified": true,
+          "sample_id": "f5f09914bb6a",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "who-air-quality-2026": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "EGY",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 1,
+          "data_verified": true,
+          "sample_id": "b21c4fc54fa9",
+          "evidence_origin": "local-public-regression"
+        }
+      ],
+      "scope_note": "发布版本2026不等于观测年2026；EGY样例实际观测年2016。"
+    },
+    "who-ghed-data": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "EGY",
+            "che_gdp",
+            "2022",
+            "2022"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 1,
+          "data_verified": true,
+          "sample_id": "cfe88efd6d95",
+          "evidence_origin": "local-public-regression"
+        }
+      ]
+    },
+    "who-ghed-indicators": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "--limit",
+            "1"
+          ],
+          "result_kind": "metadata",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "metadata",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "metadata",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "sample_id": "318ae8636605",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    },
+    "who-tb": {
+      "level": "sample_verified",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "estimates",
+            "--iso3",
+            "EGY",
+            "--year",
+            "2023",
+            "--limit",
+            "1"
+          ],
+          "result_kind": "observations",
+          "credential_used": false,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "observations",
+          "record_count": 1,
+          "has_records": true,
+          "has_content": true,
+          "has_data": true,
+          "content_level": "observations",
+          "numeric_observation_count": 1,
+          "data_verified": true,
+          "sample_id": "74a8480a860f",
+          "evidence_origin": "local-public-regression"
+        }
+      ],
+      "scope_note": "此样例为结核估计值；WHO GHED、空气质量、IARC分别核验。"
+    },
+    "wto-timeseries": {
+      "level": "sample_empty_only",
+      "samples": [
+        {
+          "checked_on": "2026-11-03",
+          "environment": "macOS; current network; sample only",
+          "args": [
+            "TP_A_0010",
+            "818",
+            "2022",
+            "--no-partner",
+            "--no-product",
+            "--limit",
+            "2"
+          ],
+          "result_kind": "unclassified",
+          "credential_used": true,
+          "ok": true,
+          "execution_ok": true,
+          "result_status": "empty_result",
+          "record_count": 0,
+          "has_records": false,
+          "has_content": false,
+          "has_data": false,
+          "content_level": "unclassified",
+          "numeric_observation_count": null,
+          "data_verified": false,
+          "empty_reason": "no_match",
+          "sample_id": "8a9bfd549dc7",
+          "evidence_origin": "local-command-execution"
+        }
+      ]
+    }
+  }
+}

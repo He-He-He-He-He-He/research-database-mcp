@@ -77,7 +77,7 @@ macOS 可能出现访问授权提示。Windows/Linux 或云端容器需要支持
 
 ## 为什么严格校验报告额外文件？
 
-严格校验针对干净发行包。`.venv`、缓存、生成配置、进度、`.DS_Store` 或仓库的 `.git` 都不在发行清单中。若原始清单文件仍正确，`pack_release.py` 可只导出白名单文件；如果原始文件被修改，则拒绝打包，应先核对修改，不能盲目重写哈希绕过。
+严格校验针对干净发行包。`.venv`、缓存、生成配置、进度、`.DS_Store` 或仓库的 `.git` 都不在发行清单中。若原始清单文件仍正确，`tools/pack_release.py` 可只导出白名单文件；如果原始文件被修改，则拒绝打包，应先核对修改，不能盲目重写哈希绕过。
 
 ## 能不能把文件夹转给别人后直接带上我的登录状态？
 
@@ -100,13 +100,13 @@ macOS 可能出现访问授权提示。Windows/Linux 或云端容器需要支持
 使用**安装后的运行副本**及其 Python、状态目录运行：
 
 ```sh
-python3 -B doctor.py
+python3 -B tools/doctor.py
 ```
 
 复现一条错误调用可加：
 
 ```sh
-python3 -B doctor.py --command arxiv --args-json '["digital economy","--rows","2"]'
+python3 -B tools/doctor.py --command arxiv --args-json '["digital economy","--rows","2"]'
 ```
 
 报告只显示版本、系统、Python、代理/CA 是否配置等状态，不打印其具体值或研究结果。需要确认客户端确实切到了新版时，核对 MCP 的 `serverInfo.version`；解压新包但没有更新连接路径/重连，仍可能使用旧进程。

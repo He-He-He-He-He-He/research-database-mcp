@@ -85,7 +85,7 @@
 POSIX 终端的示意写法如下；所有路径都要替换为**本次安装的真实输出**：
 
 ```sh
-RESEARCH_MCP_STATE_DIR="/path/to/installed/state" "/path/to/runtime/python" -B "/path/to/installed/app/onboarding.py" credential eia
+RESEARCH_MCP_STATE_DIR="/path/to/installed/state" "/path/to/runtime/python" -B "/path/to/installed/app/src/onboarding.py" credential eia
 ```
 
 Windows 应使用对应的进程环境设置方式和自己的 Python 路径，不直接照抄 POSIX 命令。

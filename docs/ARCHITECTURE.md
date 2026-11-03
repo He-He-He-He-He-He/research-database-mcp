@@ -23,18 +23,18 @@ flowchart TD
 
 | 文件/目录 | 职责 |
 |---|---|
-| `research_mcp.py` | MCP 初始化、工具列表、参数分发及协议返回 |
-| `research_cli.py` | 命令目录检查、模式门控、子进程调用、错误分类和输出包装 |
-| `onboarding.py` | 来源配置步骤、状态、跳过、暂停恢复及测试记录 |
-| `release_runtime.py` | 状态路径、系统凭据命名空间、环境/缓存隔离及脱敏辅助 |
-| `engine/research.py` | 汇总 CLI 参数解析与适配器调用 |
-| `engine/*.py` | 数据源查询、公开文件解析等具体适配器 |
-| `engine/*.mjs` | 需要外部浏览器执行环境的页面/响应辅助模块 |
-| `command_catalog.json` | 可发现命令及静态需求提示 |
+| `src/research_mcp.py` | MCP 初始化、工具列表、参数分发及协议返回 |
+| `src/research_cli.py` | 命令目录检查、模式门控、子进程调用、错误分类和输出包装 |
+| `src/onboarding.py` | 来源配置步骤、状态、跳过、暂停恢复及测试记录 |
+| `src/release_runtime.py` | 状态路径、系统凭据命名空间、环境/缓存隔离及脱敏辅助 |
+| `src/engine/research.py` | 汇总 CLI 参数解析与适配器调用 |
+| `src/engine/*.py` | 数据源查询、公开文件解析等具体适配器 |
+| `src/engine/*.mjs` | 需要外部浏览器执行环境的页面/响应辅助模块 |
+| `src/data/command_catalog.json` | 可发现命令及静态需求提示 |
 | `install.py` | 包外版本副本、虚拟环境和连接配置生成 |
-| `distribution.py` / `MANIFEST.sha256` | 发行文件白名单及哈希 |
-| `pack_release.py` / `verify_manifest.py` | 清单导出与严格发行校验 |
-| `self_check.py` / `test_distribution.py` | 离线功能及分发隔离检查 |
+| `src/distribution.py` / `MANIFEST.sha256` | 发行文件白名单及哈希 |
+| `tools/pack_release.py` / `tools/verify_manifest.py` | 清单导出与严格发行校验 |
+| `tests/test_core.py` / `tests/test_distribution.py` | 离线功能及分发隔离检查 |
 
 ## 工具参数
 
@@ -85,43 +85,43 @@ python3 -B research_cli.py crossref "renewable energy" --rows 3
 
 ## 可用性与元数据
 
-`access_policy.py` 按 general/zju/login 门控；starter 仅是起步样例。`build_access_catalog.py` 通过命令分支及可达函数扫描访问条件，避免整个模块传递误标；标记仍是静态提示；并不声明当前学校已授权或上游始终可用。新增适配器既需要实际查询验证，也需要完整的参数、分页、错误与来源说明。
+`access_policy.py` 按 general/zju/login 门控；starter 仅是起步样例。`tools/build_access_catalog.py` 通过命令分支及可达函数扫描访问条件，避免整个模块传递误标；标记仍是静态提示；并不声明当前学校已授权或上游始终可用。新增适配器既需要实际查询验证，也需要完整的参数、分页、错误与来源说明。
 
 ## 扩展一个来源的建议流程
 
 1. 明确官方入口、查询范围、需要的身份和数据口径。
 2. 实现可复用的查询/解析模块，检查返回结构、分页、错误页和缺失值。
-3. 在 `engine/research.py` 添加 CLI 入口与分发；参数使用明确的类型、数量和范围。
-4. 更新 `command_catalog.json` 的模块、需求和 readiness。不要仅因为能打开首页就放入 starter。
+3. 在 `src/engine/research.py` 添加 CLI 入口与分发；参数使用明确的类型、数量和范围。
+4. 更新 `src/data/command_catalog.json` 的模块、需求和 readiness。不要仅因为能打开首页就放入 starter。
 5. 用少量真实请求验证预期行为，记录“网页/API/全文”分别验证到什么程度；提交日志不包含真实凭据或用户数据。
 6. 补上来源与使用示例；涉及认证流程或非平凡错误处理时增加相应有意义的检查。
 7. 发布前先做隐私审计，再按许可文件范围重建发行清单、打包并回下载核验。不要通过盲目更新哈希绕过失败检查。
 
-`distribution.py` 对可分发根文件和文档路径采用明确白名单；单纯新增文件不会自动被打包，这是避免运行状态或私人文件混入的设计。
+`src/distribution.py` 对可分发根文件和文档路径采用明确白名单；单纯新增文件不会自动被打包，这是避免运行状态或私人文件混入的设计。
 
 ## 验证与提交问题
 
 对解压后的干净发行包运行：
 
 ```sh
-python3 -B verify_manifest.py
-python3 -B self_check.py
-python3 -B test_distribution.py
+python3 -B tools/verify_manifest.py
+python3 -B -m unittest discover -s tests -v
+python3 -B tests/test_distribution.py
 ```
 
-源码工作目录含 `.git` 时，严格校验会报告额外文件；可先用 `pack_release.py` 导出、解压到临时目录再验证。离线检查不替代所有源站的实时验收。
+源码工作目录含 `.git` 时，严格校验会报告额外文件；可先用 `tools/pack_release.py` 导出、解压到临时目录再验证。离线检查不替代所有源站的实时验收。
 
 提交 issue/PR 时只附可公开的最小复现条件和脱敏错误，不上传个人配置、令牌、会话、机构证明、下载材料或私人研究结果。先尊重用户现有配置，再处理目标来源。
 
 ## v1.2.0：错误契约与质量检查
 
-`diagnostics.py` 统一生成简短参数错误和脱敏来源诊断。参数错误保留 `usage`/`supported_options`，数值数量参数可从起步命令的 `count_option` 读取。MCP 工具保持五个，查询结果补充 `result_kind`、`partial` 和必要的 `warnings`。
+`diagnostics.py` 统一生成简短参数错误和脱敏来源诊断。参数错误保留 `usage`/`supported_options`，数值数量参数可从起步命令的 `count_option` 读取。MCP 工具共七个，查询结果补充 `result_kind`、`partial` 和必要的 `warnings`。
 
-网络异常只添加诊断，不改变已确认正常的适配器传输逻辑。`doctor.py` 提供版本/环境及单命令检查；`public_check.py` 是显式运行的公开样例检查，使用临时 general 状态（兼容旧 partial 别名），不读取用户实际凭据、不保存研究内容。
+网络异常只添加诊断，不改变已确认正常的适配器传输逻辑。`tools/doctor.py` 提供版本/环境及单命令检查；`tools/public_check.py` 是显式运行的公开样例检查，使用临时 general 状态（兼容旧 partial 别名），不读取用户实际凭据、不保存研究内容。
 
 ```sh
-python3 -B test_diagnostics.py
-python3 -B public_check.py --suite all --output /path/outside/package/validation.json
+python3 -B tests/test_diagnostics.py
+python3 -B tools/public_check.py --suite all --output /path/outside/package/validation.json
 ```
 
 网络检查结果受来源状态影响，不与离线回归混为一谈。GitHub Actions 在 Linux、macOS、Windows 运行离线检查，并在 Linux 抽样请求公开接口；联网失败会写入独立报告，不能只看工作流的绿色状态判断所有来源可用。
@@ -132,8 +132,14 @@ python3 -B public_check.py --suite all --output /path/outside/package/validation
 
 query 先检查权限、做离线语法校验，再查短暂网络等待缓存并实际执行。RESEARCH_MCP_VALIDATE_ONLY 仅供内部语法检查，不查询网络或凭据；参数错误优先于网络等待。实际 DNS/连接/代理/TLS/超时错误由 network_health.py 记录 60 秒；查询返回 skipped，discover 默认过滤同一命令，AI 应继续其他来源。不同命令及 HTTP 拒绝/限流不被泛化禁用；network_reset 清除等待不影响配置进度。少数旧适配器只提供通用错误时不猜测其网络状态。
 
-运行 `python3 -B build_access_catalog.py` 可复建命令静态分类。network_hosts 为代码引用的主机提示，可能包含文档/命名空间，**不作为预探测清单或批量封禁依据**。network-health.json 只存实际失败命令、脱敏类型、可选主机名和重试时间，位于包外。
+运行 `python3 -B tools/build_access_catalog.py` 可复建命令静态分类。network_hosts 为代码引用的主机提示，可能包含文档/命名空间，**不作为预探测清单或批量封禁依据**。network-health.json 只存实际失败命令、脱敏类型、可选主机名和重试时间，位于包外。
 
 ## v1.4.0查询效率
 
 新增batch_query.py、result_store.py、research_sdk.py；两项新工具沿用原模式与凭据门控。静态目录缓存；结果不缓存为查询答案，auto仅在大结果时导出本次完整返回。导出在包外，按随机编号白名单读取；SDK通过上下文状态目录传给子进程，避免不同客户端串用配置。安装器只在自己虚拟环境注册SDK路径，config-only不动系统Python。详见[批量与导出](PRODUCTIVITY.md)。
+
+## v1.4.1目录整理
+
+仓库根目录仅保留README、安装入口、AI规则和发行校验文件。实际服务、SDK与数据库适配器在src/，命令索引位于src/data/，文档在docs/，测试在tests/，维护脚本在tools/。`python3 -B install.py`保持兼容；安装器生成新的src/research_mcp.py连接路径和SDK导入路径。状态目录及系统凭据命名空间不迁移、不重置。
+
+统一测试：`python3 -B -m unittest discover -s tests -v`。维护脚本可从仓库根目录运行，例如 `python3 -B tools/pack_release.py`。旧版本的安装副本继续保留；升级后要更新连接并重连。

@@ -3,6 +3,7 @@ import sys
 sys.dont_write_bytecode=True
 import argparse,json,os,shutil,subprocess,tempfile,venv,hashlib
 from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parent/'src'))
 from distribution import verify,VERSION
 import access_policy as policy
 
@@ -43,8 +44,8 @@ def install(root,destination,mode,config_only=False,extras=False,index_url=None,
     if not config_only:
         if not folder.exists():venv.EnvBuilder(with_pip=True).create(folder)
         python=folder/('Scripts/python.exe' if os.name=='nt' else 'bin/python')
-        dependencies(python,app/'requirements.txt',index_url,fallback_index_url)
-        if extras:dependencies(python,app/'requirements-optional.txt',index_url,fallback_index_url)
+        dependencies(python,app/'src/requirements.txt',index_url,fallback_index_url)
+        if extras:dependencies(python,app/'src/requirements-optional.txt',index_url,fallback_index_url)
     else:python=Path(sys.executable).absolute()
     os.environ['RESEARCH_MCP_STATE_DIR']=str(state)
     import onboarding
@@ -52,7 +53,7 @@ def install(root,destination,mode,config_only=False,extras=False,index_url=None,
     if mode is None:mode=previous.get('mode') or 'general'
     onboarding.select(mode)
     if previous.get('paused'):onboarding.pause(True)
-    entry={'command':str(python),'args':['-B',str(app/'research_mcp.py')],'env':{'RESEARCH_MCP_STATE_DIR':str(state),'PYTHONDONTWRITEBYTECODE':'1'}}
+    entry={'command':str(python),'args':['-B',str(app/'src/research_mcp.py')],'env':{'RESEARCH_MCP_STATE_DIR':str(state),'PYTHONDONTWRITEBYTECODE':'1'}}
     config={'mcpServers':{'research-databases':entry}}
     connection=destination/'connection';connection.mkdir(exist_ok=True)
     config_path=connection/'mcp-config.json';config_path.write_text(json.dumps(config,ensure_ascii=False,indent=2),encoding='utf-8')
@@ -63,7 +64,7 @@ def install(root,destination,mode,config_only=False,extras=False,index_url=None,
         purelib=subprocess.run([str(python),'-c','import sysconfig;print(sysconfig.get_path("purelib"))'],capture_output=True,text=True,check=True).stdout.strip()
         lib=Path(purelib).resolve()
         if not lib.is_relative_to(folder.resolve()):raise ValueError('SDK导入目录不属于本工具虚拟环境，未写入')
-        (lib/'research_database_mcp.pth').write_text('import sys; sys.path.insert(0, '+ascii(str(app))+')\n',encoding='ascii')
+        (lib/'research_database_mcp.pth').write_text('import sys; sys.path.insert(0, '+ascii(str(app/"src"))+')\n',encoding='ascii')
     client_result=None
     if client or client_config:
         from client_connect import merge
