@@ -1,0 +1,7 @@
+/** 读取已打开的 Merck Index 普通检索首屏部分题录。 */
+export async function merckIndexResults(tab,query){
+ if(typeof query!=='string'||!query.trim()||query!==query.trim()||query.length>100)throw Error('请输入当前检索词');
+ const d=await tab.playwright.evaluate(()=>{const u=new URL(location.href),text=document.querySelector('#search-results-summary')?.innerText||'',n=text.match(/returned\s+([\d,]+)\s+results/i);let items=[...document.querySelectorAll('.capsule-content')].map(e=>{const a=e.querySelector('h2 a');const defs=[...e.querySelectorAll('dt')];const val=(name)=>{const x=defs.find(i=>i.innerText.trim()===name)?.nextElementSibling;return x?.getAttribute('aria-label')||x?.innerText.trim()||null};const link=a?.href?new URL(a.href):null;return {title:a?.innerText.trim()||null,url:link?link.origin+link.pathname:null,molecularWeight:val('Molecular weight'),molecularFormula:val('Molecular formula')}}).filter(x=>x.title&&x.url).slice(0,10);return {host:u.hostname,path:u.pathname,q:u.searchParams.get('q'),total:n?Number(n[1].replaceAll(',','')):null,page:document.querySelector('#pagination-position-top')?.getAttribute('aria-label'),items};});
+ if(d.host!=='merckindex.rsc.org'||d.path!=='/search-results'||d.q!==query||d.total===null||!/^Page 1\b/.test(d.page||'')||!d.items.length)throw Error('当前标签不是指定查询的 Merck Index 首页结果');
+ return {source:'The Merck Index Online',query,total:d.total,items:d.items,note:'当前页面最多 10 条公开预览题录；不证明学校机构认证或完整专论权限。'};
+}

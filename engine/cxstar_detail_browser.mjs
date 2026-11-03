@@ -1,0 +1,6 @@
+/** 读取当前已打开的畅想之星书目详情，不访问阅读或下载链接。 */
+export async function cxstarBookDetail(tab,recordId){
+ if(typeof recordId!=='string'||!/^[a-zA-Z0-9_-]{5,100}$/.test(recordId))throw Error('请输入搜索结果中的书目编号');
+ const d=await tab.playwright.evaluate(()=>{let u=new URL(location.href), t=document.querySelector('.book-title')?.innerText.trim(),root=document.querySelector('.detail-author')?.parentElement?.parentElement;let fields={};for(const li of root?.querySelectorAll(':scope > li')||[]){const k=li.querySelector(':scope > p')?.innerText.trim().replace(/[:：]$/,''),v=li.querySelector(':scope > span')?.innerText.trim();if(k&&v&&['ISBN','主题','中图法分类号'].includes(k))fields[k]=v}return {host:u.hostname,path:u.pathname,id:u.searchParams.get('ruid'),institution:document.title.includes('浙江大学'),title:t,author:document.querySelector('.detail-author')?.innerText.replace(/^作者[:：]\s*/,'').trim(),publisher:document.querySelector('.detail-pub')?.innerText.replace(/^出版社[:：]\s*/,'').trim(),published:document.querySelector('.detail-pubdate')?.innerText.replace(/^出版时间[:：]\s*/,'').trim(),fields}});
+ if(d.host!=='www.cxstar.com'||d.path!=='/Book/Detail'||d.id!==recordId||!d.institution||!d.title||!d.fields.ISBN)throw Error('详情页面、馆属或书目编号未确认');return {source:'畅想之星书目详情',...d,institution:'浙江大学',note:'显示页面书目资料；不检查或输出阅读链接、全文及会话信息。'};
+}

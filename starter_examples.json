@@ -1,0 +1,126 @@
+[
+  {
+    "source": "nbs",
+    "command": "nbs-macro-list",
+    "args": [
+      "--page",
+      "1"
+    ]
+  },
+  {
+    "source": "law",
+    "command": "law-search",
+    "args": [
+      "消费者权益保护法",
+      "--size",
+      "1"
+    ]
+  },
+  {
+    "source": "spp",
+    "command": "spp-reports",
+    "args": []
+  },
+  {
+    "source": "worldbank",
+    "command": "wb-series",
+    "args": [
+      "FRA",
+      "SP.POP.TOTL",
+      "--start",
+      "2020",
+      "--end",
+      "2023"
+    ]
+  },
+  {
+    "source": "crossref",
+    "command": "crossref",
+    "args": [
+      "renewable energy",
+      "--rows",
+      "1"
+    ]
+  },
+  {
+    "source": "arxiv",
+    "command": "arxiv",
+    "args": [
+      "renewable energy",
+      "--size",
+      "1"
+    ]
+  },
+  {
+    "source": "pubmed",
+    "command": "pubmed-search",
+    "args": [
+      "renewable energy",
+      "--size",
+      "1"
+    ]
+  },
+  {
+    "source": "ncbi",
+    "command": "ncbi-databases",
+    "args": []
+  },
+  {
+    "source": "usgs",
+    "command": "usgs-earthquakes",
+    "args": [
+      "2024-01-01",
+      "2024-01-02",
+      "--min-magnitude",
+      "5",
+      "--limit",
+      "1"
+    ]
+  },
+  {
+    "source": "nasa",
+    "command": "nasa-power-daily",
+    "args": [
+      "0",
+      "0",
+      "2024-01-01",
+      "2024-01-02"
+    ]
+  },
+  {
+    "source": "cbs",
+    "command": "cbs-datasets",
+    "args": [
+      "--query",
+      "population",
+      "--top",
+      "1"
+    ]
+  },
+  {
+    "source": "ons",
+    "command": "ons-dataset-discover",
+    "args": [
+      "population",
+      "--max-pages",
+      "1",
+      "--limit",
+      "1"
+    ]
+  },
+  {
+    "source": "faostat",
+    "command": "faostat-api-domains",
+    "args": [
+      "--limit",
+      "1"
+    ]
+  },
+  {
+    "source": "bis",
+    "command": "bis-dataflows",
+    "args": [
+      "exchange"
+    ]
+  }
+]

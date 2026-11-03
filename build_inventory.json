@@ -1,0 +1,11 @@
+{
+  "python_modules": 2281,
+  "browser_modules": 375,
+  "commands": 3753,
+  "institution_specific": 251,
+  "may_need_public_file": 822,
+  "bundled_private_data": false,
+  "starter_commands": 37,
+  "release_version": "1.1.0",
+  "runtime_location": "outside-distribution"
+}

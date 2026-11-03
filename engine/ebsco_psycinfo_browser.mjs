@@ -1,0 +1,8 @@
+/* EBSCO APA PsycInfo：依赖已有浙大机构会话，读取首屏题录。 */
+export async function ebscoPsycInfoSearch(tab,keyword){
+ if(typeof keyword!=='string'||!keyword.trim()||keyword.length>100)throw Error('关键词需为 1–100 字');const q=keyword.trim();
+ await tab.goto('https://research.ebsco.com/c/7ro37y/search?db=psyh');
+ try{await tab.playwright.locator('#search-input').fill(q);await tab.playwright.getByRole('button',{name:'搜索',exact:true}).click();for(let i=0;i<4;i++){try{await tab.playwright.locator('#result-list a[data-auto="result-item-title__link"]').first().waitFor({state:'visible',timeoutMs:20000});break;}catch{if(i===3)throw Error('结果加载超时');}}}catch{throw Error('未读取题录；请检查机构会话、无结果或页面变化。');}
+ const data=await tab.playwright.evaluate(()=>({database:document.querySelector('[data-auto="selected-databases-button"]')?.innerText.trim()||'',institution:document.body.innerText.includes('ZHEJIANG UNIV')?'ZHEJIANG UNIV':null,items:[...document.querySelectorAll('#result-list a[data-auto="result-item-title__link"]')].filter(a=>a.getClientRects().length).map(a=>{let s=a.closest('section');return {title:a.innerText.trim(),id:a.id,url:a.href,type:s?.querySelector('[data-auto="article-type"]')?.innerText.trim(),metadata:s?.querySelector('[data-auto="result-item-metadata"]')?.innerText.trim(),database:s?.querySelector('[data-auto="result-item-metadata-content--database"]')?.innerText.trim()}})}));
+ if(!data.database.includes('APA PsycInfo')||!data.items.length||data.items.some(x=>x.database!=='APA PsycInfo'))throw Error('数据库范围未通过核对');return {source:'APA PsycInfo',query:q,page:1,...data,note:'首屏题录；需已建立机构会话，全文未验证。'};
+}

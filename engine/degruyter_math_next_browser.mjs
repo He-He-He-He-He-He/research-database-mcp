@@ -1,0 +1,9 @@
+/** 出版商数学期刊搜索第 1 页跳到第 2 页；不是学校订购清单。 */
+export async function degruyterMathNext(tab,query){
+ if(typeof query!=='string'||!query.trim()||query!==query.trim()||query.length>200)throw Error('请输入当前检索词');
+ const read=()=>tab.playwright.evaluate(()=>{const p=new URL(location.href).searchParams,text=document.querySelector('#pageSizeAndSortForm')?.innerText||'',m=text.match(/(\d[\d,]*)\s+of\s+(\d[\d,]*)\s+results/i);return {host:location.hostname,path:location.pathname,q:p.get('query'),subject:p.get('subjectFacet'),type:p.get('documentTypeFacet'),start:p.get('startItem'),visible:m?Number(m[1].replaceAll(',','')):null,total:m?Number(m[2].replaceAll(',','')):null,items:[...document.querySelectorAll('#searchResultsItems .searchResult')].map(c=>({title:c.querySelector('.resultTitle h3')?.innerText.trim()||null,url:c.querySelector('.resultTitle a')?.href||null,type:c.querySelector('.newResultType')?.innerText.trim()||null,access:c.querySelector('.contentAvailability')?.getAttribute('title')||null})).filter(x=>x.title&&x.url)};});
+ const first=await read();if(first.host!=='www.degruyterbrill.com'||first.path!=='/search'||first.q!==query||first.subject!=='MT'||first.type!=='journal'||first.start!=='0'||!first.items.length||first.total<=10)throw Error('当前标签不是有第二页的数学期刊首页');
+ await tab.playwright.getByRole('link',{name:'2',exact:true}).click();
+ for(let i=0;i<60;i++){const d=await read();if(d.host===first.host&&d.path===first.path&&d.q===query&&d.subject==='MT'&&d.type==='journal'&&d.start==='10'&&d.total===first.total&&d.visible!==null&&d.items.length===d.visible&&d.items[0]?.title!==first.items[0]?.title)return {source:'De Gruyter Brill 数学期刊公开结果',query,page:2,total:d.total,items:d.items,note:'出版社数学期刊目录，并非学校订购清单；全文与机构权限未验证。'};await new Promise(r=>setTimeout(r,250));}
+ throw Error('未确认第二页结果');
+}

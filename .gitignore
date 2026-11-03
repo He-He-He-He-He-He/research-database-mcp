@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.DS_Store
+__MACOSX/
+.venv/
+.env
+.env.*
+*.log
+progress.json
+mcp-config*.json
+mcp-config*.toml

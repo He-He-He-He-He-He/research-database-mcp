@@ -1,0 +1,55 @@
+"""Shaanxi 11 cities/regions population, income and retail, 2014–2023."""
+import release_runtime
+import hashlib, re
+import fitz, requests
+URL = 'https://tjj.baoji.gov.cn/zzzb/tjnj/202506/P020250928637183356569.pdf'
+CITIES = ['西安市', '铜川市', '宝鸡市', '咸阳市', '渭南市', '延安市', '汉中市', '榆林市', '安康市', '商洛市', '杨凌示范区']
+METRICS = {'gdp_per_capita': {'page': 40, 'name': '人均地区生产总值', 'unit': '元', 'city_y': (145, 440), 'year_y': (110, 150), 'end': 2023, 'offset': 31.5, 'note': '该原表含2014—2022年，不含2023年；原数为该年鉴版本，可能与后续核算修订不同。'}, 'local_fiscal_income': {'page': 41, 'name': '地方财政收入', 'unit': '亿元', 'city_y': (180, 760), 'year_y': (120, 155), 'end': 2024, 'offset': 30, 'note': '原表为地方财政收入，具体预算口径须核原年鉴统计说明；历史数可能与后续修订不同。'}}
+
+def catalog():
+    return [{'metric': k, 'name': v['name'], 'unit': v['unit'], 'pdf_page': v['page'], 'years': list(range(2014, v['end'])), 'note': v['note']} for k, v in METRICS.items()]
+
+def table(metric, city='', year=None):
+    if not isinstance(metric, str) or metric not in METRICS:
+        raise ValueError('invalid metric')
+    if not isinstance(city, str) or len(city) > 30:
+        raise ValueError('invalid city')
+    if year is not None and (type(year) is not int or year not in range(2014, METRICS[metric]['end'])):
+        raise ValueError('year outside selected metric coverage')
+    with requests.get(URL, stream=True, timeout=(10, 50), allow_redirects=False) as r:
+        r.raise_for_status()
+        if r.is_redirect:
+            raise ValueError('unexpected redirect')
+        data = bytearray()
+        for c in r.iter_content(65536):
+            data.extend(c)
+            if len(data) > 15000000:
+                raise ValueError('PDF too large')
+    raw = bytes(data)
+    if not raw.startswith(b'%PDF-'):
+        raise ValueError('expected PDF')
+    config = METRICS[metric]
+    records = []
+    with fitz.open(stream=raw, filetype='pdf') as doc:
+        if len(doc) != 285:
+            raise ValueError('unexpected PDF version')
+        p = doc[config['page'] - 1]
+        words = p.get_text('words')
+        for name in CITIES:
+            lo, hi = config['city_y']
+            cs = {(round(w[0], 2), round(w[1], 2)) for w in words if w[4] == name and lo < w[1] < hi}
+            if len(cs) != 1:
+                raise ValueError('ambiguous city anchor ' + name)
+            _, cy = next(iter(cs))
+            for y in range(2014, config['end']):
+                lo, hi = config['year_y']
+                ys = {(round(w[0], 2), round(w[1], 2)) for w in words if w[4] == str(y) and lo < w[1] < hi}
+                if len(ys) != 1:
+                    raise ValueError('ambiguous year anchor')
+                xx, _ = next(iter(ys))
+                values = [w[4] for w in words if abs(w[2] - (xx + config['offset'])) < 4 and abs(w[1] - cy) < 6 and re.fullmatch('\\d+(?:\\.\\d+)?', w[4])]
+                if len(values) != 1:
+                    raise ValueError(f'could not uniquely verify value: {name} {y}')
+                if city in name and (year is None or year == y):
+                    records.append({'city': name, 'year': y, 'value': values[0]})
+    return {'source': '宝鸡统计年鉴2023年资料', 'source_url': URL, 'source_sha256': hashlib.sha256(raw).hexdigest(), 'metric': metric, 'name': config['name'], 'unit': config['unit'], 'pdf_page': config['page'], 'rows': records, 'note': config['note'] + ' 按原生PDF坐标读取，逐值唯一校验；该年鉴版本不代表最新修订。'}
